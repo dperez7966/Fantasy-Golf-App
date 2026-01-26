@@ -1,0 +1,3742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Fantasy Golf League - Live Leaderboard</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+    .drag-over { border-color: #2563eb; background-color: #eff6ff; }
+    @keyframes pulse-green { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+    .pulse-green { animation: pulse-green 2s ease-in-out infinite; }
+  </style>
+</head>
+<body class="bg-white text-gray-900">
+  <div id="root"></div>
+
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+
+  <script>
+  
+  // Embedded data from Excel file
+  const EMBEDDED_DATA = {
+  "historical": [
+    {
+      "Player": "Andrew",
+      "Tournament": "The American Express",
+      "Pick": "Ben Griffin",
+      "Results": 81420
+    },
+    {
+      "Player": "Craig",
+      "Tournament": "The American Express",
+      "Pick": "Si Woo Kim",
+      "Results": 322000
+    },
+    {
+      "Player": "Dan",
+      "Tournament": "The American Express",
+      "Pick": "Nick Taylor",
+      "Results": 57918
+    },
+    {
+      "Player": "Gordo",
+      "Tournament": "The American Express",
+      "Pick": "Patrick Cantlay",
+      "Results": 169740
+    },
+    {
+      "Player": "Kyle",
+      "Tournament": "The American Express",
+      "Pick": "Sam Burns",
+      "Results": 57918
+    },
+    {
+      "Player": "Mike",
+      "Tournament": "The American Express",
+      "Pick": "J.T. Poston",
+      "Results": 39100
+    },
+    {
+      "Player": "Phil",
+      "Tournament": "The American Express",
+      "Pick": "Sepp Straka",
+      "Results": 0
+    },
+    {
+      "Player": "Rahul",
+      "Tournament": "The American Express",
+      "Pick": "Harry Hall",
+      "Results": 81420
+    },
+    {
+      "Player": "Todd",
+      "Tournament": "The American Express",
+      "Pick": "Ryan Gerard",
+      "Results": 616400
+    },
+    {
+      "Player": "Andrew",
+      "Tournament": "Farmers Insurance Open",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Craig",
+      "Tournament": "Farmers Insurance Open",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Dan",
+      "Tournament": "Farmers Insurance Open",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Gordo",
+      "Tournament": "Farmers Insurance Open",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Kyle",
+      "Tournament": "Farmers Insurance Open",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Mike",
+      "Tournament": "Farmers Insurance Open",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Phil",
+      "Tournament": "Farmers Insurance Open",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Rahul",
+      "Tournament": "Farmers Insurance Open",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Todd",
+      "Tournament": "Farmers Insurance Open",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Andrew",
+      "Tournament": "WM Phoenix Open",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Craig",
+      "Tournament": "WM Phoenix Open",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Dan",
+      "Tournament": "WM Phoenix Open",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Gordo",
+      "Tournament": "WM Phoenix Open",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Kyle",
+      "Tournament": "WM Phoenix Open",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Mike",
+      "Tournament": "WM Phoenix Open",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Phil",
+      "Tournament": "WM Phoenix Open",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Rahul",
+      "Tournament": "WM Phoenix Open",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Todd",
+      "Tournament": "WM Phoenix Open",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Andrew",
+      "Tournament": "Pebble Beach Pro-Am",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Craig",
+      "Tournament": "Pebble Beach Pro-Am",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Dan",
+      "Tournament": "Pebble Beach Pro-Am",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Gordo",
+      "Tournament": "Pebble Beach Pro-Am",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Kyle",
+      "Tournament": "Pebble Beach Pro-Am",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Mike",
+      "Tournament": "Pebble Beach Pro-Am",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Phil",
+      "Tournament": "Pebble Beach Pro-Am",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Rahul",
+      "Tournament": "Pebble Beach Pro-Am",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Todd",
+      "Tournament": "Pebble Beach Pro-Am",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Andrew",
+      "Tournament": "The Genesis Invitational",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Craig",
+      "Tournament": "The Genesis Invitational",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Dan",
+      "Tournament": "The Genesis Invitational",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Gordo",
+      "Tournament": "The Genesis Invitational",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Kyle",
+      "Tournament": "The Genesis Invitational",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Mike",
+      "Tournament": "The Genesis Invitational",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Phil",
+      "Tournament": "The Genesis Invitational",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Rahul",
+      "Tournament": "The Genesis Invitational",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Todd",
+      "Tournament": "The Genesis Invitational",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Andrew",
+      "Tournament": "Cognizant Classic in the Palm Beaches",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Craig",
+      "Tournament": "Cognizant Classic in the Palm Beaches",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Dan",
+      "Tournament": "Cognizant Classic in the Palm Beaches",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Gordo",
+      "Tournament": "Cognizant Classic in the Palm Beaches",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Kyle",
+      "Tournament": "Cognizant Classic in the Palm Beaches",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Mike",
+      "Tournament": "Cognizant Classic in the Palm Beaches",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Phil",
+      "Tournament": "Cognizant Classic in the Palm Beaches",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Rahul",
+      "Tournament": "Cognizant Classic in the Palm Beaches",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Todd",
+      "Tournament": "Cognizant Classic in the Palm Beaches",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Andrew",
+      "Tournament": "Arnold Palmer Invitational presented by Mastercard",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Craig",
+      "Tournament": "Arnold Palmer Invitational presented by Mastercard",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Dan",
+      "Tournament": "Arnold Palmer Invitational presented by Mastercard",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Gordo",
+      "Tournament": "Arnold Palmer Invitational presented by Mastercard",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Kyle",
+      "Tournament": "Arnold Palmer Invitational presented by Mastercard",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Mike",
+      "Tournament": "Arnold Palmer Invitational presented by Mastercard",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Phil",
+      "Tournament": "Arnold Palmer Invitational presented by Mastercard",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Rahul",
+      "Tournament": "Arnold Palmer Invitational presented by Mastercard",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Todd",
+      "Tournament": "Arnold Palmer Invitational presented by Mastercard",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Andrew",
+      "Tournament": "THE PLAYERS Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Craig",
+      "Tournament": "THE PLAYERS Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Dan",
+      "Tournament": "THE PLAYERS Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Gordo",
+      "Tournament": "THE PLAYERS Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Kyle",
+      "Tournament": "THE PLAYERS Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Mike",
+      "Tournament": "THE PLAYERS Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Phil",
+      "Tournament": "THE PLAYERS Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Rahul",
+      "Tournament": "THE PLAYERS Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Todd",
+      "Tournament": "THE PLAYERS Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Andrew",
+      "Tournament": "Valspar Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Craig",
+      "Tournament": "Valspar Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Dan",
+      "Tournament": "Valspar Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Gordo",
+      "Tournament": "Valspar Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Kyle",
+      "Tournament": "Valspar Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Mike",
+      "Tournament": "Valspar Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Phil",
+      "Tournament": "Valspar Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Rahul",
+      "Tournament": "Valspar Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Todd",
+      "Tournament": "Valspar Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Andrew",
+      "Tournament": "Texas Children's Houston Open",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Craig",
+      "Tournament": "Texas Children's Houston Open",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Dan",
+      "Tournament": "Texas Children's Houston Open",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Gordo",
+      "Tournament": "Texas Children's Houston Open",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Kyle",
+      "Tournament": "Texas Children's Houston Open",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Mike",
+      "Tournament": "Texas Children's Houston Open",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Phil",
+      "Tournament": "Texas Children's Houston Open",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Rahul",
+      "Tournament": "Texas Children's Houston Open",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Todd",
+      "Tournament": "Texas Children's Houston Open",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Andrew",
+      "Tournament": "Valero Texas Open",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Craig",
+      "Tournament": "Valero Texas Open",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Dan",
+      "Tournament": "Valero Texas Open",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Gordo",
+      "Tournament": "Valero Texas Open",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Kyle",
+      "Tournament": "Valero Texas Open",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Mike",
+      "Tournament": "Valero Texas Open",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Phil",
+      "Tournament": "Valero Texas Open",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Rahul",
+      "Tournament": "Valero Texas Open",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Todd",
+      "Tournament": "Valero Texas Open",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Andrew",
+      "Tournament": "Masters Tournament",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Craig",
+      "Tournament": "Masters Tournament",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Dan",
+      "Tournament": "Masters Tournament",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Gordo",
+      "Tournament": "Masters Tournament",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Kyle",
+      "Tournament": "Masters Tournament",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Mike",
+      "Tournament": "Masters Tournament",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Phil",
+      "Tournament": "Masters Tournament",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Rahul",
+      "Tournament": "Masters Tournament",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Todd",
+      "Tournament": "Masters Tournament",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Andrew",
+      "Tournament": "RBC Heritage",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Craig",
+      "Tournament": "RBC Heritage",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Dan",
+      "Tournament": "RBC Heritage",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Gordo",
+      "Tournament": "RBC Heritage",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Kyle",
+      "Tournament": "RBC Heritage",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Mike",
+      "Tournament": "RBC Heritage",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Phil",
+      "Tournament": "RBC Heritage",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Rahul",
+      "Tournament": "RBC Heritage",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Todd",
+      "Tournament": "RBC Heritage",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Andrew",
+      "Tournament": "Zurich Classic of New Orleans",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Craig",
+      "Tournament": "Zurich Classic of New Orleans",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Dan",
+      "Tournament": "Zurich Classic of New Orleans",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Gordo",
+      "Tournament": "Zurich Classic of New Orleans",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Kyle",
+      "Tournament": "Zurich Classic of New Orleans",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Mike",
+      "Tournament": "Zurich Classic of New Orleans",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Phil",
+      "Tournament": "Zurich Classic of New Orleans",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Rahul",
+      "Tournament": "Zurich Classic of New Orleans",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Todd",
+      "Tournament": "Zurich Classic of New Orleans",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Andrew",
+      "Tournament": "Cadillac Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Craig",
+      "Tournament": "Cadillac Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Dan",
+      "Tournament": "Cadillac Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Gordo",
+      "Tournament": "Cadillac Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Kyle",
+      "Tournament": "Cadillac Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Mike",
+      "Tournament": "Cadillac Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Phil",
+      "Tournament": "Cadillac Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Rahul",
+      "Tournament": "Cadillac Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Todd",
+      "Tournament": "Cadillac Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Andrew",
+      "Tournament": "Truist Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Craig",
+      "Tournament": "Truist Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Dan",
+      "Tournament": "Truist Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Gordo",
+      "Tournament": "Truist Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Kyle",
+      "Tournament": "Truist Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Mike",
+      "Tournament": "Truist Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Phil",
+      "Tournament": "Truist Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Rahul",
+      "Tournament": "Truist Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Todd",
+      "Tournament": "Truist Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Andrew",
+      "Tournament": "PGA Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Craig",
+      "Tournament": "PGA Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Dan",
+      "Tournament": "PGA Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Gordo",
+      "Tournament": "PGA Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Kyle",
+      "Tournament": "PGA Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Mike",
+      "Tournament": "PGA Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Phil",
+      "Tournament": "PGA Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Rahul",
+      "Tournament": "PGA Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Todd",
+      "Tournament": "PGA Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Andrew",
+      "Tournament": "The CJ Cup Byron Nelson",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Craig",
+      "Tournament": "The CJ Cup Byron Nelson",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Dan",
+      "Tournament": "The CJ Cup Byron Nelson",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Gordo",
+      "Tournament": "The CJ Cup Byron Nelson",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Kyle",
+      "Tournament": "The CJ Cup Byron Nelson",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Mike",
+      "Tournament": "The CJ Cup Byron Nelson",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Phil",
+      "Tournament": "The CJ Cup Byron Nelson",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Rahul",
+      "Tournament": "The CJ Cup Byron Nelson",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Todd",
+      "Tournament": "The CJ Cup Byron Nelson",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Andrew",
+      "Tournament": "Charles Schwab Challenge",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Craig",
+      "Tournament": "Charles Schwab Challenge",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Dan",
+      "Tournament": "Charles Schwab Challenge",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Gordo",
+      "Tournament": "Charles Schwab Challenge",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Kyle",
+      "Tournament": "Charles Schwab Challenge",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Mike",
+      "Tournament": "Charles Schwab Challenge",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Phil",
+      "Tournament": "Charles Schwab Challenge",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Rahul",
+      "Tournament": "Charles Schwab Challenge",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Todd",
+      "Tournament": "Charles Schwab Challenge",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Andrew",
+      "Tournament": "the Memorial Tournament presented by Workday",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Craig",
+      "Tournament": "the Memorial Tournament presented by Workday",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Dan",
+      "Tournament": "the Memorial Tournament presented by Workday",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Gordo",
+      "Tournament": "the Memorial Tournament presented by Workday",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Kyle",
+      "Tournament": "the Memorial Tournament presented by Workday",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Mike",
+      "Tournament": "the Memorial Tournament presented by Workday",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Phil",
+      "Tournament": "the Memorial Tournament presented by Workday",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Rahul",
+      "Tournament": "the Memorial Tournament presented by Workday",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Todd",
+      "Tournament": "the Memorial Tournament presented by Workday",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Andrew",
+      "Tournament": "RBC Canadian Open",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Craig",
+      "Tournament": "RBC Canadian Open",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Dan",
+      "Tournament": "RBC Canadian Open",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Gordo",
+      "Tournament": "RBC Canadian Open",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Kyle",
+      "Tournament": "RBC Canadian Open",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Mike",
+      "Tournament": "RBC Canadian Open",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Phil",
+      "Tournament": "RBC Canadian Open",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Rahul",
+      "Tournament": "RBC Canadian Open",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Todd",
+      "Tournament": "RBC Canadian Open",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Andrew",
+      "Tournament": "U.S. Open",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Craig",
+      "Tournament": "U.S. Open",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Dan",
+      "Tournament": "U.S. Open",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Gordo",
+      "Tournament": "U.S. Open",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Kyle",
+      "Tournament": "U.S. Open",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Mike",
+      "Tournament": "U.S. Open",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Phil",
+      "Tournament": "U.S. Open",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Rahul",
+      "Tournament": "U.S. Open",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Todd",
+      "Tournament": "U.S. Open",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Andrew",
+      "Tournament": "Travelers Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Craig",
+      "Tournament": "Travelers Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Dan",
+      "Tournament": "Travelers Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Gordo",
+      "Tournament": "Travelers Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Kyle",
+      "Tournament": "Travelers Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Mike",
+      "Tournament": "Travelers Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Phil",
+      "Tournament": "Travelers Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Rahul",
+      "Tournament": "Travelers Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Todd",
+      "Tournament": "Travelers Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Andrew",
+      "Tournament": "John Deere Classic",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Craig",
+      "Tournament": "John Deere Classic",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Dan",
+      "Tournament": "John Deere Classic",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Gordo",
+      "Tournament": "John Deere Classic",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Kyle",
+      "Tournament": "John Deere Classic",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Mike",
+      "Tournament": "John Deere Classic",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Phil",
+      "Tournament": "John Deere Classic",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Rahul",
+      "Tournament": "John Deere Classic",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Todd",
+      "Tournament": "John Deere Classic",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Andrew",
+      "Tournament": "Genesis Scottish Open",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Craig",
+      "Tournament": "Genesis Scottish Open",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Dan",
+      "Tournament": "Genesis Scottish Open",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Gordo",
+      "Tournament": "Genesis Scottish Open",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Kyle",
+      "Tournament": "Genesis Scottish Open",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Mike",
+      "Tournament": "Genesis Scottish Open",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Phil",
+      "Tournament": "Genesis Scottish Open",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Rahul",
+      "Tournament": "Genesis Scottish Open",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Todd",
+      "Tournament": "Genesis Scottish Open",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Andrew",
+      "Tournament": "The Open Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Craig",
+      "Tournament": "The Open Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Dan",
+      "Tournament": "The Open Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Gordo",
+      "Tournament": "The Open Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Kyle",
+      "Tournament": "The Open Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Mike",
+      "Tournament": "The Open Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Phil",
+      "Tournament": "The Open Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Rahul",
+      "Tournament": "The Open Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Todd",
+      "Tournament": "The Open Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Andrew",
+      "Tournament": "3M Open",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Craig",
+      "Tournament": "3M Open",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Dan",
+      "Tournament": "3M Open",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Gordo",
+      "Tournament": "3M Open",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Kyle",
+      "Tournament": "3M Open",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Mike",
+      "Tournament": "3M Open",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Phil",
+      "Tournament": "3M Open",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Rahul",
+      "Tournament": "3M Open",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Todd",
+      "Tournament": "3M Open",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Andrew",
+      "Tournament": "Rocket Classic",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Craig",
+      "Tournament": "Rocket Classic",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Dan",
+      "Tournament": "Rocket Classic",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Gordo",
+      "Tournament": "Rocket Classic",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Kyle",
+      "Tournament": "Rocket Classic",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Mike",
+      "Tournament": "Rocket Classic",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Phil",
+      "Tournament": "Rocket Classic",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Rahul",
+      "Tournament": "Rocket Classic",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Todd",
+      "Tournament": "Rocket Classic",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Andrew",
+      "Tournament": "Wyndham Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Craig",
+      "Tournament": "Wyndham Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Dan",
+      "Tournament": "Wyndham Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Gordo",
+      "Tournament": "Wyndham Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Kyle",
+      "Tournament": "Wyndham Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Mike",
+      "Tournament": "Wyndham Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Phil",
+      "Tournament": "Wyndham Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Rahul",
+      "Tournament": "Wyndham Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Todd",
+      "Tournament": "Wyndham Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Andrew",
+      "Tournament": "FedEx St. Jude Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Craig",
+      "Tournament": "FedEx St. Jude Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Dan",
+      "Tournament": "FedEx St. Jude Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Gordo",
+      "Tournament": "FedEx St. Jude Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Kyle",
+      "Tournament": "FedEx St. Jude Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Mike",
+      "Tournament": "FedEx St. Jude Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Phil",
+      "Tournament": "FedEx St. Jude Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Rahul",
+      "Tournament": "FedEx St. Jude Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Todd",
+      "Tournament": "FedEx St. Jude Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Andrew",
+      "Tournament": "BMW Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Craig",
+      "Tournament": "BMW Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Dan",
+      "Tournament": "BMW Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Gordo",
+      "Tournament": "BMW Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Kyle",
+      "Tournament": "BMW Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Mike",
+      "Tournament": "BMW Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Phil",
+      "Tournament": "BMW Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Rahul",
+      "Tournament": "BMW Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Todd",
+      "Tournament": "BMW Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Andrew",
+      "Tournament": "TOUR Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Craig",
+      "Tournament": "TOUR Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Dan",
+      "Tournament": "TOUR Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Gordo",
+      "Tournament": "TOUR Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Kyle",
+      "Tournament": "TOUR Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Mike",
+      "Tournament": "TOUR Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Phil",
+      "Tournament": "TOUR Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Rahul",
+      "Tournament": "TOUR Championship",
+      "Pick": "",
+      "Results": 0
+    },
+    {
+      "Player": "Todd",
+      "Tournament": "TOUR Championship",
+      "Pick": "",
+      "Results": 0
+    }
+  ],
+  "tournaments": [
+    {
+      "Tournament Name": "The American Express",
+      "Course": "Pete Dye Stadium Course",
+      "City": "La Quinta",
+      "State": "CA",
+      "Country": "USA",
+      "Latitude": 33.6631,
+      "Longitude": -116.2931,
+      "Tournament Location": null,
+      "Tournament Start Date": "2026-01-22T00:00:00",
+      "Tournament End Date": "2026-01-25T00:00:00",
+      "Tournament Purse": 9200000,
+      "Deep Cut Fact": null
+    },
+    {
+      "Tournament Name": "Farmers Insurance Open",
+      "Course": "Torrey Pines Golf Couse (South Couse)",
+      "City": "San Diego",
+      "State": "CA",
+      "Country": "USA",
+      "Latitude": 32.9037,
+      "Longitude": -117.245,
+      "Tournament Location": null,
+      "Tournament Start Date": "2026-01-29T00:00:00",
+      "Tournament End Date": "2026-02-02T00:00:00",
+      "Tournament Purse": 9600000,
+      "Deep Cut Fact": "Torrey Pines South Course redesigned around Tiger Woods' game; 2008 U.S. Open win on torn ACL"
+    },
+    {
+      "Tournament Name": "WM Phoenix Open",
+      "Course": "TPC Scottsdale (Stadium Course)",
+      "City": "Scottsadle",
+      "State": "AZ",
+      "Country": "USA",
+      "Latitude": 33.5462,
+      "Longitude": -111.891,
+      "Tournament Location": null,
+      "Tournament Start Date": "2026-02-05T00:00:00",
+      "Tournament End Date": "2026-02-08T00:00:00",
+      "Tournament Purse": 9600000,
+      "Deep Cut Fact": "16th hole engineered for extreme crowd noise; security trained for crowd control first"
+    },
+    {
+      "Tournament Name": "Pebble Beach Pro-Am",
+      "Course": "Pebble Beach Golf Links",
+      "City": "Pebble Beach",
+      "State": "CA",
+      "Country": "USA",
+      "Latitude": 36.5687,
+      "Longitude": -121.9503,
+      "Tournament Location": null,
+      "Tournament Start Date": "2026-02-12T00:00:00",
+      "Tournament End Date": "2026-02-15T00:00:00",
+      "Tournament Purse": 20000000,
+      "Deep Cut Fact": "Tiger avoided entire career; pros historically hated amateur-controlled pace"
+    },
+    {
+      "Tournament Name": "The Genesis Invitational",
+      "Course": "The Riviera Country Club",
+      "City": "Pacific Palisades",
+      "State": "CA",
+      "Country": "USA",
+      "Latitude": 34.0496,
+      "Longitude": -118.5013,
+      "Tournament Location": null,
+      "Tournament Start Date": "2026-02-19T00:00:00",
+      "Tournament End Date": "2026-02-22T00:00:00",
+      "Tournament Purse": 20000000,
+      "Deep Cut Fact": null
+    },
+    {
+      "Tournament Name": "Cognizant Classic in the Palm Beaches",
+      "Course": "PGA National Resort (The Champion Course)",
+      "City": "Palm Beach Gardens",
+      "State": "FL",
+      "Country": "USA",
+      "Latitude": 26.8258,
+      "Longitude": -80.143,
+      "Tournament Location": null,
+      "Tournament Start Date": "2026-02-26T00:00:00",
+      "Tournament End Date": "2026-03-01T00:00:00",
+      "Tournament Purse": 9600000,
+      "Deep Cut Fact": null
+    },
+    {
+      "Tournament Name": "Arnold Palmer Invitational presented by Mastercard",
+      "Course": "Arnold Palmer's Bay Hill Club & Lodge",
+      "City": "Orlando",
+      "State": "FL",
+      "Country": "USA",
+      "Latitude": 28.4889,
+      "Longitude": -81.4931,
+      "Tournament Location": null,
+      "Tournament Start Date": "2026-03-05T00:00:00",
+      "Tournament End Date": "2026-03-08T00:00:00",
+      "Tournament Purse": 20000000,
+      "Deep Cut Fact": null
+    },
+    {
+      "Tournament Name": "THE PLAYERS Championship",
+      "Course": "TPC Sawgrass (THE PLAYERS Stadium Course)",
+      "City": "Ponte Vedra Beach",
+      "State": "FL ",
+      "Country": "USA",
+      "Latitude": 30.2162,
+      "Longitude": -81.5339,
+      "Tournament Location": null,
+      "Tournament Start Date": "2026-03-12T00:00:00",
+      "Tournament End Date": "2026-03-15T00:00:00",
+      "Tournament Purse": 25000000,
+      "Deep Cut Fact": "Island green was construction accident; players have bargaining power"
+    },
+    {
+      "Tournament Name": "Valspar Championship",
+      "Course": "Innisbrook Resort (Copperhead Course)",
+      "City": "Palm Harbor",
+      "State": "FL",
+      "Country": "USA",
+      "Latitude": 28.1006,
+      "Longitude": -82.7625,
+      "Tournament Location": null,
+      "Tournament Start Date": "2026-03-19T00:00:00",
+      "Tournament End Date": "2026-03-22T00:00:00",
+      "Tournament Purse": 9100000,
+      "Deep Cut Fact": "Closing stretch harder than Augusta's on average"
+    },
+    {
+      "Tournament Name": "Texas Children's Houston Open",
+      "Course": "Memorial Park Golf Course",
+      "City": "Houston",
+      "State": "TX",
+      "Country": "USA",
+      "Latitude": 29.7604,
+      "Longitude": -95.4037,
+      "Tournament Location": null,
+      "Tournament Start Date": "2026-03-26T00:00:00",
+      "Tournament End Date": "2026-03-29T00:00:00",
+      "Tournament Purse": 9900000,
+      "Deep Cut Fact": null
+    },
+    {
+      "Tournament Name": "Valero Texas Open",
+      "Course": "TPC San Antonio (Oaks Course)",
+      "City": "San Antonio",
+      "State": "TX",
+      "Country": "USA",
+      "Latitude": 29.4056,
+      "Longitude": -98.6549,
+      "Tournament Location": null,
+      "Tournament Start Date": "2026-04-02T00:00:00",
+      "Tournament End Date": "2026-04-05T00:00:00",
+      "Tournament Purse": 9800000,
+      "Deep Cut Fact": "Most last-minute Masters qualifiers; built on quarry pits"
+    },
+    {
+      "Tournament Name": "Masters Tournament",
+      "Course": "Augusta National Golf Club",
+      "City": "Augusta",
+      "State": "GA",
+      "Country": "USA",
+      "Latitude": 33.5021,
+      "Longitude": -82.02,
+      "Tournament Location": null,
+      "Tournament Start Date": "2026-04-09T00:00:00",
+      "Tournament End Date": "2026-04-12T00:00:00",
+      "Tournament Purse": 0,
+      "Deep Cut Fact": "Employs more meteorologists than some airports; green jackets never owned"
+    },
+    {
+      "Tournament Name": "RBC Heritage",
+      "Course": "Harbour Town Golf Links",
+      "City": "Hilton Head ",
+      "State": "SC",
+      "Country": "USA",
+      "Latitude": 32.2122,
+      "Longitude": -80.7526,
+      "Tournament Location": null,
+      "Tournament Start Date": "2026-04-16T00:00:00",
+      "Tournament End Date": "2026-04-19T00:00:00",
+      "Tournament Purse": 20000000,
+      "Deep Cut Fact": "Nicklaus hated it because it exposed bombers"
+    },
+    {
+      "Tournament Name": "Zurich Classic of New Orleans",
+      "Course": "TPC Louisiana",
+      "City": "Avondale",
+      "State": "LA",
+      "Country": "USA",
+      "Latitude": 29.9097,
+      "Longitude": -90.1547,
+      "Tournament Location": null,
+      "Tournament Start Date": "2026-04-23T00:00:00",
+      "Tournament End Date": "2026-04-26T00:00:00",
+      "Tournament Purse": 9500000,
+      "Deep Cut Fact": null
+    },
+    {
+      "Tournament Name": "Cadillac Championship",
+      "Course": "Trump National Doral (Blue Monster)",
+      "City": "Miami",
+      "State": "FL",
+      "Country": "USA",
+      "Latitude": 25.814,
+      "Longitude": -80.3808,
+      "Tournament Location": null,
+      "Tournament Start Date": "2026-04-30T00:00:00",
+      "Tournament End Date": "2026-05-03T00:00:00",
+      "Tournament Purse": 20000000,
+      "Deep Cut Fact": null
+    },
+    {
+      "Tournament Name": "Truist Championship",
+      "Course": "Quail Hollow Club",
+      "City": "Charlotte",
+      "State": "NC",
+      "Country": "USA",
+      "Latitude": 35.2271,
+      "Longitude": -80.8451,
+      "Tournament Location": null,
+      "Tournament Start Date": "2026-05-07T00:00:00",
+      "Tournament End Date": "2026-05-10T00:00:00",
+      "Tournament Purse": 20000000,
+      "Deep Cut Fact": "Green Mile produces more bogeys than Sawgrass 17"
+    },
+    {
+      "Tournament Name": "PGA Championship",
+      "Course": "Aronimink Golf Club",
+      "City": "Newtown Square",
+      "State": "PA",
+      "Country": "USA",
+      "Latitude": 39.9737,
+      "Longitude": -75.3721,
+      "Tournament Location": null,
+      "Tournament Start Date": "2026-05-14T00:00:00",
+      "Tournament End Date": "2026-05-17T00:00:00",
+      "Tournament Purse": 0,
+      "Deep Cut Fact": "Trophy lost multiple times; club pros prioritized internally"
+    },
+    {
+      "Tournament Name": "The CJ Cup Byron Nelson",
+      "Course": "TPC Craig Ranch",
+      "City": "McKinney",
+      "State": "TX",
+      "Country": "USA",
+      "Latitude": 33.1976,
+      "Longitude": -96.6398,
+      "Tournament Location": null,
+      "Tournament Start Date": "2026-05-21T00:00:00",
+      "Tournament End Date": "2026-05-24T00:00:00",
+      "Tournament Purse": 10300000,
+      "Deep Cut Fact": null
+    },
+    {
+      "Tournament Name": "Charles Schwab Challenge",
+      "Course": "Colonial Country Club",
+      "City": "Fort Worth",
+      "State": "TX",
+      "Country": "USA",
+      "Latitude": 32.7382,
+      "Longitude": -97.3397,
+      "Tournament Location": null,
+      "Tournament Start Date": "2026-05-28T00:00:00",
+      "Tournament End Date": "2026-05-31T00:00:00",
+      "Tournament Purse": 9900000,
+      "Deep Cut Fact": "Hogan said it required more thought than any course"
+    },
+    {
+      "Tournament Name": "the Memorial Tournament presented by Workday",
+      "Course": "Muifield Village Golf Club",
+      "City": "Dublin",
+      "State": "OH",
+      "Country": "USA",
+      "Latitude": 40.116,
+      "Longitude": -83.0959,
+      "Tournament Location": null,
+      "Tournament Start Date": "2026-06-04T00:00:00",
+      "Tournament End Date": "2026-06-07T00:00:00",
+      "Tournament Purse": 20000000,
+      "Deep Cut Fact": null
+    },
+    {
+      "Tournament Name": "RBC Canadian Open",
+      "Course": "TPC Toronto at Osprey Valley (North Course)",
+      "City": "Caledon",
+      "State": "ON",
+      "Country": "Canada",
+      "Latitude": 43.8396,
+      "Longitude": -80.0104,
+      "Tournament Location": null,
+      "Tournament Start Date": "2026-06-11T00:00:00",
+      "Tournament End Date": "2026-06-14T00:00:00",
+      "Tournament Purse": 9800000,
+      "Deep Cut Fact": "More first-time national champions than any other Open"
+    },
+    {
+      "Tournament Name": "U.S. Open",
+      "Course": "Shinnecock Hills Golf Club",
+      "City": "Southamption",
+      "State": "NY",
+      "Country": "USA",
+      "Latitude": 40.8882,
+      "Longitude": -72.4767,
+      "Tournament Location": null,
+      "Tournament Start Date": "2026-06-18T00:00:00",
+      "Tournament End Date": "2026-06-21T00:00:00",
+      "Tournament Purse": 0,
+      "Deep Cut Fact": "Setup aims for defensible par; under-par wins seen as failure"
+    },
+    {
+      "Tournament Name": "Travelers Championship",
+      "Course": "TPC River Highlands",
+      "City": "Cromwell",
+      "State": "CT",
+      "Country": "USA",
+      "Latitude": 41.6208,
+      "Longitude": -72.6414,
+      "Tournament Location": null,
+      "Tournament Start Date": "2026-06-25T00:00:00",
+      "Tournament End Date": "2026-06-28T00:00:00",
+      "Tournament Purse": 20000000,
+      "Deep Cut Fact": "Top 3 in player satisfaction; elite via hospitality"
+    },
+    {
+      "Tournament Name": "John Deere Classic",
+      "Course": "TPC Deere Run",
+      "City": "Silvis",
+      "State": "IL",
+      "Country": "USA",
+      "Latitude": 41.5068,
+      "Longitude": -90.3457,
+      "Tournament Location": null,
+      "Tournament Start Date": "2026-07-02T00:00:00",
+      "Tournament End Date": "2026-07-05T00:00:00",
+      "Tournament Purse": 8800000,
+      "Deep Cut Fact": "Launchpad for careers; most first-time winners"
+    },
+    {
+      "Tournament Name": "Genesis Scottish Open",
+      "Course": "The Renaissance Club",
+      "City": "North Berwick",
+      "State": null,
+      "Country": "Scotland",
+      "Latitude": 56.0353,
+      "Longitude": -2.8364,
+      "Tournament Location": null,
+      "Tournament Start Date": "2026-07-09T00:00:00",
+      "Tournament End Date": "2026-07-12T00:00:00",
+      "Tournament Purse": 9000000,
+      "Deep Cut Fact": "Wind data used in Open forecasting"
+    },
+    {
+      "Tournament Name": "The Open Championship",
+      "Course": "Royal Birkdale Golf Club",
+      "City": "Southport",
+      "State": null,
+      "Country": "England",
+      "Latitude": 53.646,
+      "Longitude": -3.0038,
+      "Tournament Location": null,
+      "Tournament Start Date": "2026-07-16T00:00:00",
+      "Tournament End Date": "2026-07-19T00:00:00",
+      "Tournament Purse": 0,
+      "Deep Cut Fact": "Originally played on public land with livestock"
+    },
+    {
+      "Tournament Name": "3M Open",
+      "Course": "TPC Twin Cities",
+      "City": "Blaine",
+      "State": "MN",
+      "Country": "USA",
+      "Latitude": 45.1604,
+      "Longitude": -93.2438,
+      "Tournament Location": null,
+      "Tournament Start Date": "2026-07-23T00:00:00",
+      "Tournament End Date": "2026-07-26T00:00:00",
+      "Tournament Purse": 8800000,
+      "Deep Cut Fact": "Bentgrass greens tuned for TV lighting"
+    },
+    {
+      "Tournament Name": "Rocket Classic",
+      "Course": "Detroit Golf Club",
+      "City": "Detroit",
+      "State": "MI",
+      "Country": "USA",
+      "Latitude": 42.4084,
+      "Longitude": -83.0967,
+      "Tournament Location": null,
+      "Tournament Start Date": "2026-07-30T00:00:00",
+      "Tournament End Date": "2026-08-02T00:00:00",
+      "Tournament Purse": 10000000,
+      "Deep Cut Fact": "First full fan-facing analytics integration"
+    },
+    {
+      "Tournament Name": "Wyndham Championship",
+      "Course": "Sedgefield Country Club",
+      "City": "Greensboro",
+      "State": "NC",
+      "Country": "USA",
+      "Latitude": 36.0726,
+      "Longitude": -79.812,
+      "Tournament Location": null,
+      "Tournament Start Date": "2026-08-06T00:00:00",
+      "Tournament End Date": "2026-08-09T00:00:00",
+      "Tournament Purse": 8500000,
+      "Deep Cut Fact": "Determines job security; most volatile event"
+    },
+    {
+      "Tournament Name": "FedEx St. Jude Championship",
+      "Course": "TPC Southwind",
+      "City": "Memphis",
+      "State": "TN",
+      "Country": "USA",
+      "Latitude": 35.0164,
+      "Longitude": -89.8716,
+      "Tournament Location": null,
+      "Tournament Start Date": "2026-08-13T00:00:00",
+      "Tournament End Date": "2026-08-16T00:00:00",
+      "Tournament Purse": 20000000,
+      "Deep Cut Fact": "Biggest status elimination cliff"
+    },
+    {
+      "Tournament Name": "BMW Championship",
+      "Course": "Bellerive Country Club",
+      "City": "St. Louis",
+      "State": "MO",
+      "Country": "USA",
+      "Latitude": 38.6051,
+      "Longitude": -90.414,
+      "Tournament Location": null,
+      "Tournament Start Date": "2026-08-20T00:00:00",
+      "Tournament End Date": "2026-08-23T00:00:00",
+      "Tournament Purse": 20000000,
+      "Deep Cut Fact": "31st place more meaningful than winning"
+    },
+    {
+      "Tournament Name": "TOUR Championship",
+      "Course": "East Lake Golf Club",
+      "City": "Atlanta",
+      "State": "GA",
+      "Country": "USA",
+      "Latitude": 33.7421,
+      "Longitude": -84.3029,
+      "Tournament Location": null,
+      "Tournament Start Date": "2026-08-27T00:00:00",
+      "Tournament End Date": "2026-08-30T00:00:00",
+      "Tournament Purse": 40000000,
+      "Deep Cut Fact": "Feels like investment meeting; second can outpay most wins"
+    }
+  ]
+};
+
+
+  const { useEffect, useMemo, useState, useCallback } = React;
+
+  // Helper functions
+  function currency(n) {
+    if (n === null || n === undefined) return '—';
+    if (n === 0) return '$0';
+    try {
+      return n.toLocaleString('en-US', { style: "currency", currency: "USD", maximumFractionDigits: 0 });
+    } catch (e) {
+      return '$' + n.toFixed(0);
+    }
+  }
+
+  function clsx() {
+    return Array.from(arguments).filter(Boolean).join(" ");
+  }
+
+  // Scrape ESPN leaderboard using CORS proxy
+  async function scrapeESPNLeaderboard() {
+    try {
+      const corsProxy = 'https://api.allorigins.win/raw?url=';
+      const espnUrl = encodeURIComponent('https://www.espn.com/golf/leaderboard');
+      
+      const response = await fetch(corsProxy + espnUrl);
+      if (!response.ok) throw new Error('Failed to fetch leaderboard');
+      
+      const html = await response.text();
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, 'text/html');
+      
+      const titleElement = doc.querySelector('.Leaderboard__Event__Title, h1');
+      const tournamentName = titleElement ? titleElement.textContent.trim() : 'Unknown Tournament';
+      
+      const statusElement = doc.querySelector('.Leaderboard__Event__Date, .Leaderboard__Round__Info');
+      const status = statusElement ? statusElement.textContent.trim() : 'In Progress';
+      
+      // ESPN has 3 different layouts:
+      // Round 1: POS | PLAYER | SCORE | THRU (4-6 columns)
+      // Rounds 2-4: POS | R | PLAYER | TOT | TODAY | THRU | SCORECARD (8-9 columns)
+      // Post-Tournament: [HIDDEN] | POS | PLAYER | SCORE | R1 | R2 | R3 | R4 | TOT | EARNINGS | FEDEX PTS (10+ columns)
+      
+      const firstRow = doc.querySelector('tbody tr.Table__TR');
+      let tournamentState = 'round1'; // round1, midround, or final
+      let colPos, colName, colTot, colThru, colEarnings;
+      
+      if (firstRow) {
+        const cells = firstRow.querySelectorAll('td');
+        const cellCount = cells.length;
+        
+        // SMART DETECTION: Find player name column by looking for <a> tag with player link
+        colName = -1;
+        for (let i = 0; i < cells.length; i++) {
+          const link = cells[i].querySelector('a');
+          if (link && link.textContent.trim().length > 3) {
+            // Found the player name column (has link and actual text)
+            colName = i;
+            break;
+          }
+        }
+        
+        if (cellCount >= 10) {
+          // Post-tournament layout (10+ columns)
+          tournamentState = 'final';
+          colPos = colName - 1;  // Position is usually 1 before player name
+          colTot = colName + 1;  // Score to par is usually 1 after player name
+          colThru = colName + 6; // TOT (total strokes)
+          colEarnings = colName + 7; // Earnings
+        } else if (cellCount >= 8) {
+          // Rounds 2-4 layout (8-9 columns)
+          tournamentState = 'midround';
+          colPos = colName - 2;  // Position (skip round number)
+          colTot = colName + 1;  // Total score to par
+          colThru = colName + 3; // Thru
+          colEarnings = -1; // No earnings during tournament
+        } else {
+          // Round 1 layout (4-6 columns)
+          tournamentState = 'round1';
+          colPos = colName - 1;  // Position
+          colTot = colName + 1;  // Score to par
+          colThru = colName + 2; // Thru
+          colEarnings = -1; // No earnings during tournament
+        }
+        
+        console.log(`Tournament state: ${tournamentState}, Columns: ${cellCount}, Name column: ${colName}`);
+      }
+      
+      const leaderboard = [];
+      const rows = doc.querySelectorAll('tbody tr.Table__TR');
+      
+      rows.forEach(row => {
+        try {
+          if (row.querySelector('th')) return;
+          const cells = row.querySelectorAll('td');
+          if (cells.length < 4) return;
+          
+          const nameCell = cells[colName];
+          if (!nameCell) return;
+          
+          const link = nameCell.querySelector('a');
+          let name = link ? link.textContent.trim() : nameCell.textContent.trim();
+          name = name.replace(/\s+/g, ' ').trim();
+          if (!name || name.length < 3) return;
+          
+          const position = cells[colPos]?.textContent.trim() || '—';
+          
+          let score = '—';
+          const scoreCell = cells[colTot];
+          if (scoreCell) {
+            const scoreText = scoreCell.textContent.trim();
+            // Match patterns: -17, +5, E, --
+            if (scoreText.match(/^[+\-]\d+$/) || scoreText === 'E' || scoreText === '--' || scoreText === 'Par') {
+              score = scoreText === '--' ? 'E' : scoreText === 'Par' ? 'E' : scoreText;
+            }
+          }
+          
+          let thru = '—';
+          const thruCell = cells[colThru];
+          if (thruCell) {
+            const thruText = thruCell.textContent.trim();
+            // In post-tournament, show "F" for finished instead of total strokes
+            if (tournamentState === 'final') {
+              thru = 'F';
+            } else if (thruText === 'F' || thruText.match(/^\d{1,2}\*?$/) || thruText === '*') {
+              thru = thruText;
+            }
+          }
+          
+          let earnings = 0;
+          // If we have a specific earnings column (post-tournament), use it
+          if (colEarnings >= 0 && cells[colEarnings]) {
+            const earningsText = cells[colEarnings].textContent.trim();
+            if (earningsText.match(/^\$[\d,]+$/)) {
+              earnings = parseFloat(earningsText.replace(/[$,]/g, ''));
+            }
+          } else {
+            // Fallback: search for any cell with earnings pattern
+            for (let i = 0; i < cells.length; i++) {
+              const cellText = cells[i].textContent.trim();
+              if (cellText.match(/^\$[\d,]+$/)) {
+                earnings = parseFloat(cellText.replace(/[$,]/g, ''));
+                break;
+              }
+            }
+          }
+          
+          leaderboard.push({ name, position, score, thru, earnings });
+        } catch (e) {
+          console.warn('Error parsing row:', e);
+        }
+      });
+      
+      // DEBUG: Log all golfer names found
+      console.log('ESPN Leaderboard Names:', leaderboard.map(g => g.name));
+      
+      return {
+        tournamentName,
+        status,
+        leaderboard: leaderboard.filter(g => g.name && g.name.length > 2),
+        lastUpdated: new Date(),
+        rawDataAvailable: leaderboard.length > 0
+      };
+    } catch (error) {
+      console.error('Error scraping ESPN:', error);
+      throw error;
+    }
+  }
+
+  function getCurrentTournament(tournaments) {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    for (const t of tournaments) {
+      const start = t['Tournament Start Date'] ? new Date(t['Tournament Start Date']) : null;
+      const end = t['Tournament End Date'] ? new Date(t['Tournament End Date']) : null;
+      
+      if (start && end) {
+        start.setHours(0, 0, 0, 0);
+        end.setHours(23, 59, 59, 999);
+        
+        if (today >= start && today <= end) {
+          return t;
+        }
+      }
+    }
+    
+    const upcoming = tournaments
+      .filter(t => t['Tournament Start Date'])
+      .map(t => ({ ...t, startDate: new Date(t['Tournament Start Date']) }))
+      .filter(t => t.startDate >= today)
+      .sort((a, b) => a.startDate - b.startDate);
+    
+    return upcoming[0] || tournaments[0] || null;
+  }
+
+  function getUsedGolfers(historical) {
+    const used = {};
+    historical.forEach(h => {
+      if (!used[h.Player]) used[h.Player] = [];
+      if (h.Pick && !used[h.Player].includes(h.Pick)) {
+        used[h.Player].push(h.Pick);
+      }
+    });
+    return used;
+  }
+
+  // Fuzzy match golfer names - handles initials, multi-word names, etc.
+  function matchGolferName(pickName, golferName) {
+    const normalize = (str) => str.toLowerCase().replace(/[^a-z\s]/g, '').trim();
+    const pick = normalize(pickName);
+    const golfer = normalize(golferName);
+    
+    // Exact match
+    if (pick === golfer) return true;
+    
+    // Contains match (simple fallback)
+    if (pick.includes(golfer) || golfer.includes(pick)) return true;
+    
+    // Split into parts
+    const pickParts = pick.split(/\s+/).filter(p => p.length > 0);
+    const golferParts = golfer.split(/\s+/).filter(p => p.length > 0);
+    
+    if (pickParts.length < 2 || golferParts.length < 2) {
+      return false; // Need at least first + last
+    }
+    
+    // Get last names (always last element)
+    const pickLast = pickParts[pickParts.length - 1];
+    const golferLast = golferParts[golferParts.length - 1];
+    
+    // Last names must match (exact or contains)
+    const lastNameMatch = pickLast === golferLast || 
+                          pickLast.includes(golferLast) || 
+                          golferLast.includes(pickLast);
+    
+    if (!lastNameMatch) return false;
+    
+    // Last names match! Now check first names/initials
+    // Get all parts EXCEPT last name
+    const pickFirstParts = pickParts.slice(0, -1);
+    const golferFirstParts = golferParts.slice(0, -1);
+    
+    // Check each first name part
+    for (let i = 0; i < Math.max(pickFirstParts.length, golferFirstParts.length); i++) {
+      const pickPart = pickFirstParts[i] || '';
+      const golferPart = golferFirstParts[i] || '';
+      
+      // If either is missing, skip
+      if (!pickPart || !golferPart) continue;
+      
+      // Exact match
+      if (pickPart === golferPart) continue;
+      
+      // Initial match (first letter)
+      if (pickPart[0] === golferPart[0]) continue;
+      
+      // Contains match
+      if (pickPart.includes(golferPart) || golferPart.includes(pickPart)) continue;
+      
+      // No match for this part - fail
+      return false;
+    }
+    
+    // All parts matched!
+    return true;
+  }
+
+  // Main App Component
+  function App() {
+    const [excelData, setExcelData] = useState(EMBEDDED_DATA);
+    const [tab, setTab] = useState("week");
+    const [liveData, setLiveData] = useState(null);
+    const [isLoadingLive, setIsLoadingLive] = useState(false);
+    const [lastUpdate, setLastUpdate] = useState(null);
+    const [error, setError] = useState(null);
+    const [menuOpen, setMenuOpen] = useState(false);
+
+    const members = ["Todd", "Craig", "Gordo", "Rahul", "Andrew", "Kyle", "Dan", "Mike", "Phil"];
+
+    // Auto-refresh live data every 3 minutes when on live tab
+    useEffect(() => {
+      if (tab === "live" && excelData) {
+        fetchLiveData();
+        const interval = setInterval(fetchLiveData, 180000); // 3 minutes
+        return () => clearInterval(interval);
+      }
+    }, [tab, excelData]);
+
+    const fetchLiveData = async () => {
+      setIsLoadingLive(true);
+      setError(null);
+      try {
+        const data = await scrapeESPNLeaderboard();
+        if (data) {
+          setLiveData(data);
+          setLastUpdate(data.lastUpdated);
+        }
+      } catch (err) {
+        setError('Failed to load ESPN leaderboard. Please try again.');
+        console.error(err);
+      }
+      setIsLoadingLive(false);
+    };
+
+    const currentTournament = useMemo(() => {
+      if (!excelData) return null;
+      return getCurrentTournament(excelData.tournaments);
+    }, [excelData]);
+
+    const usedGolfers = useMemo(() => {
+      if (!excelData) return {};
+      return getUsedGolfers(excelData.historical);
+    }, [excelData]);
+
+    // Calculate picks used by player (for Picks Used tab)
+    const picksUsedByPlayer = useMemo(() => {
+      if (!excelData) return {};
+      const picksByPlayer = {};
+      members.forEach(m => picksByPlayer[m] = []);
+      
+      excelData.historical.forEach(h => {
+        if (picksByPlayer[h.Player] !== undefined && h.Pick) {
+          // Check if already in list (avoid duplicates)
+          if (!picksByPlayer[h.Player].includes(h.Pick)) {
+            picksByPlayer[h.Player].push(h.Pick);
+          }
+        }
+      });
+      
+      return picksByPlayer;
+    }, [excelData]);
+
+    const currentWeekPicks = useMemo(() => {
+      if (!excelData || !currentTournament) return [];
+      return excelData.historical.filter(h => h.Tournament === currentTournament['Tournament Name']);
+    }, [excelData, currentTournament]);
+
+    const seasonStandings = useMemo(() => {
+      if (!excelData) return [];
+      
+      const totals = {};
+      members.forEach(m => totals[m] = 0);
+      
+      excelData.historical.forEach(h => {
+        if (totals[h.Player] !== undefined) {
+          totals[h.Player] += (h.Results || 0);
+        }
+      });
+      
+      return Object.entries(totals)
+        .map(([name, total]) => ({ name, total }))
+        .sort((a, b) => b.total - a.total);
+    }, [excelData]);
+
+    const leaderName = seasonStandings[0]?.name || null;
+
+    return (
+      React.createElement("div", { className: "min-h-screen bg-white text-gray-900 flex flex-col" },
+        React.createElement("header", { className: "bg-blue-900 text-white px-4 py-3 shadow-md" },
+          React.createElement("div", { className: "max-w-md mx-auto flex items-center justify-between" },
+            React.createElement("button", {
+              onClick: () => setMenuOpen(true),
+              className: "text-white hover:text-gray-300 transition"
+            },
+              React.createElement("svg", {
+                className: "w-6 h-6",
+                fill: "none",
+                stroke: "currentColor",
+                viewBox: "0 0 24 24"
+              },
+                React.createElement("path", {
+                  strokeLinecap: "round",
+                  strokeLinejoin: "round",
+                  strokeWidth: 2,
+                  d: "M4 6h16M4 12h16M4 18h16"
+                })
+              )
+            ),
+            React.createElement("div", { className: "text-center" },
+              React.createElement("div", { className: "font-bold tracking-wide" }, "Fantasy Golf League"),
+              currentTournament && React.createElement("div", { className: "text-xs opacity-80" }, currentTournament['Tournament Name'])
+            ),
+            React.createElement("div", { className: "w-6" })
+          )
+        ),
+
+        React.createElement("main", { className: "flex-1 max-w-md mx-auto w-full pb-4" },
+          tab === "week" && React.createElement(ThisWeek, { 
+            leaderName, 
+            currentWeekPicks,
+            currentTournament,
+            historical: excelData.historical,
+            members
+          }),
+          tab === "live" && React.createElement(LiveLeaderboard, {
+            currentWeekPicks,
+            liveData,
+            isLoadingLive,
+            lastUpdate,
+            onRefresh: fetchLiveData,
+            currentTournament,
+            error,
+            matchGolferName
+          }),
+          tab === "picks" && React.createElement(PicksUsed, {
+            picksUsedByPlayer,
+            members
+          }),
+          tab === "standings" && React.createElement(Standings, { 
+            historical: excelData.historical,
+            members,
+            currentTournament
+          }),
+          tab === "history" && React.createElement(History, { 
+            historical: excelData.historical 
+          })
+        ),
+
+        menuOpen && React.createElement(HamburgerNav, {
+          activeTab: tab,
+          onTabChange: setTab,
+          onClose: () => setMenuOpen(false)
+        })
+      )
+    );
+  }
+
+  function TabButton({ active, onClick, label, isLive }) {
+    return React.createElement("button", {
+      onClick,
+      className: clsx(
+        "py-3 text-sm font-medium border-t-2 relative",
+        active ? "bg-blue-800 border-yellow-400" : "bg-blue-900 border-transparent",
+        "focus:outline-none w-full"
+      )
+    }, 
+      label,
+      isLive && !active && React.createElement("span", { 
+        className: "absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full pulse-green"
+      })
+    );
+  }
+
+  function LiveLeaderboard({ currentWeekPicks, liveData, isLoadingLive, lastUpdate, onRefresh, currentTournament, error, matchGolferName }) {
+    // Match picks to live leaderboard
+    const matchedPicks = useMemo(() => {
+      if (!liveData || !currentWeekPicks.length) return [];
+      
+      console.log('=== MATCHING DEBUG ===');
+      console.log('Picks to match:', currentWeekPicks.map(p => p.Pick));
+      
+      return currentWeekPicks.map(pick => {
+        // Find matching golfer in live leaderboard
+        const golferData = liveData.leaderboard.find(g => {
+          const match = matchGolferName(pick.Pick, g.name);
+          if (!match) {
+            console.log(`❌ "${pick.Pick}" vs "${g.name}" - NO MATCH`);
+          } else {
+            console.log(`✅ "${pick.Pick}" vs "${g.name}" - MATCH!`);
+          }
+          return match;
+        });
+        
+        if (!golferData) {
+          console.log(`⚠️ NO MATCH FOUND for ${pick.Pick}`);
+        }
+        
+        return {
+          player: pick.Player,
+          golfer: pick.Pick,
+          position: golferData?.position || '—',
+          score: golferData?.score || '—',
+          thru: golferData?.thru || '—',
+          earnings: golferData?.earnings || 0,
+          found: !!golferData
+        };
+      }).sort((a, b) => {
+        // Sort by position first
+        const posA = parseInt(a.position.replace(/[^\d]/g, '')) || 999;
+        const posB = parseInt(b.position.replace(/[^\d]/g, '')) || 999;
+        if (posA !== posB) return posA - posB;
+        
+        // Then by earnings
+        return b.earnings - a.earnings;
+      });
+    }, [liveData, currentWeekPicks, matchGolferName]);
+
+    const formatTime = (date) => {
+      if (!date) return '';
+      return date.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+    };
+
+    if (error) {
+      return (
+        React.createElement("section", { className: "px-4 pt-4" },
+          React.createElement("div", { className: "bg-red-50 border-2 border-red-200 rounded-xl p-8 text-center" },
+            React.createElement("div", { className: "text-4xl mb-3" }, "⚠️"),
+            React.createElement("h3", { className: "text-lg font-semibold text-red-900 mb-2" }, "Error Loading Leaderboard"),
+            React.createElement("p", { className: "text-sm text-red-700 mb-4" }, error),
+            React.createElement("button", {
+              onClick: onRefresh,
+              className: "bg-red-600 hover:bg-red-700 text-white px-6 py-3 rounded-lg font-semibold"
+            }, "Try Again")
+          ),
+          React.createElement("div", { className: "mt-4 bg-blue-50 border border-blue-200 rounded-lg p-4 text-xs" },
+            React.createElement("p", { className: "font-semibold mb-2" }, "💡 Troubleshooting:"),
+            React.createElement("ul", { className: "list-disc list-inside space-y-1 text-gray-700" },
+              React.createElement("li", null, "CORS proxy may be temporarily down"),
+              React.createElement("li", null, "ESPN website structure may have changed"),
+              React.createElement("li", null, "Check your internet connection"),
+              React.createElement("li", null, "Try again in a few minutes")
+            )
+          )
+        )
+      );
+    }
+
+    if (!liveData && !isLoadingLive) {
+      return (
+        React.createElement("section", { className: "px-4 pt-4" },
+          React.createElement("div", { className: "bg-blue-50 border-2 border-blue-200 rounded-xl p-8 text-center" },
+            React.createElement("div", { className: "text-4xl mb-3" }, "📡"),
+            React.createElement("h3", { className: "text-lg font-semibold text-blue-900 mb-2" }, "Live Leaderboard"),
+            React.createElement("p", { className: "text-sm text-gray-600 mb-4" }, "Tap the button below to load live scores from ESPN"),
+            React.createElement("button", {
+              onClick: onRefresh,
+              className: "bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold"
+            }, "Load Live Scores")
+          ),
+          React.createElement("div", { className: "mt-4 bg-yellow-50 border border-yellow-200 rounded-lg p-3 text-xs" },
+            React.createElement("p", { className: "font-semibold text-yellow-900 mb-1" }, "ℹ️ How it works:"),
+            React.createElement("p", { className: "text-yellow-800" }, 
+              "This app scrapes ESPN's public leaderboard webpage to get live tournament scores. ",
+              "It uses a CORS proxy to access the data from your browser."
+            )
+          )
+        )
+      );
+    }
+
+    return (
+      React.createElement("section", { className: "px-4 pt-4" },
+        React.createElement("div", { className: "bg-gradient-to-r from-red-600 to-red-700 rounded-xl p-4 text-white mb-4" },
+          React.createElement("div", { className: "flex items-center justify-between mb-2" },
+            React.createElement("div", null,
+              React.createElement("h2", { className: "text-xl font-bold" }, "🔴 Live Leaderboard"),
+              liveData && React.createElement("p", { className: "text-sm opacity-90" }, liveData.tournamentName)
+            ),
+            React.createElement("button", {
+              onClick: onRefresh,
+              disabled: isLoadingLive,
+              className: clsx(
+                "bg-red-800 hover:bg-red-900 disabled:bg-red-900 px-3 py-1 rounded text-xs font-semibold",
+                isLoadingLive && "opacity-50 cursor-not-allowed"
+              )
+            }, isLoadingLive ? "⏳" : "↻ Refresh")
+          ),
+          liveData && React.createElement("div", { className: "text-xs opacity-80 flex items-center gap-2" },
+            React.createElement("span", null, liveData.status),
+            lastUpdate && React.createElement("span", null, "• Updated ", formatTime(lastUpdate))
+          )
+        ),
+
+        isLoadingLive && React.createElement("div", { className: "text-center py-12" },
+          React.createElement("div", { className: "text-5xl mb-3 animate-bounce" }, "⏳"),
+          React.createElement("p", { className: "text-gray-600 font-semibold" }, "Fetching ESPN data..."),
+          React.createElement("p", { className: "text-gray-500 text-sm mt-2" }, "This may take a few seconds")
+        ),
+
+        !isLoadingLive && liveData && !liveData.rawDataAvailable && React.createElement("div", { className: "bg-yellow-50 border border-yellow-300 rounded-lg p-4 mb-4" },
+          React.createElement("p", { className: "text-sm text-yellow-900 font-semibold mb-1" }, "⚠️ No leaderboard data found"),
+          React.createElement("p", { className: "text-xs text-yellow-800" }, 
+            "ESPN's page structure may have changed or no tournament is currently active. Try refreshing or check ESPN.com directly."
+          )
+        ),
+
+        !isLoadingLive && matchedPicks.length > 0 && React.createElement("div", { className: "space-y-3 mb-16" },
+          matchedPicks.map((pick, idx) => 
+            React.createElement("div", {
+              key: idx,
+              className: clsx(
+                "bg-white border-2 rounded-xl p-4 transition-all",
+                idx === 0 && pick.found ? "border-green-500 bg-green-50" : 
+                !pick.found ? "border-orange-300 bg-orange-50" : "border-gray-200"
+              )
+            },
+              React.createElement("div", { className: "flex items-start justify-between mb-2" },
+                React.createElement("div", null,
+                  React.createElement("div", { className: "font-bold text-blue-900" }, pick.player),
+                  React.createElement("div", { className: "text-sm text-gray-600" }, pick.golfer),
+                  !pick.found && React.createElement("div", { className: "text-xs text-orange-700 mt-1 font-semibold" }, "⚠️ Not found - check spelling")
+                ),
+                React.createElement("div", { className: "text-right" },
+                  React.createElement("div", { className: "text-2xl font-bold text-blue-900" }, pick.position),
+                  React.createElement("div", { className: "text-xs text-gray-500" }, "Position")
+                )
+              ),
+              pick.found && React.createElement("div", { className: "grid grid-cols-3 gap-4 text-center pt-3 border-t" },
+                React.createElement("div", null,
+                  React.createElement("div", { className: "text-xs text-gray-500" }, "Score"),
+                  React.createElement("div", { className: "font-semibold" }, pick.score)
+                ),
+                React.createElement("div", null,
+                  React.createElement("div", { className: "text-xs text-gray-500" }, "Thru"),
+                  React.createElement("div", { className: "font-semibold" }, pick.thru)
+                ),
+                React.createElement("div", null,
+                  React.createElement("div", { className: "text-xs text-gray-500" }, "Earnings"),
+                  React.createElement("div", { className: "font-semibold text-green-600" }, 
+                    pick.earnings > 0 ? currency(pick.earnings) : "—"
+                  )
+                )
+              )
+            )
+          )
+        ),
+
+        !isLoadingLive && liveData && matchedPicks.length === 0 && currentWeekPicks.length === 0 && 
+          React.createElement("div", { className: "text-center py-8 text-gray-500" },
+            React.createElement("p", null, "No picks found for this tournament")
+          ),
+
+        !isLoadingLive && liveData && React.createElement("div", { className: "bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4 text-xs" },
+          React.createElement("p", { className: "font-semibold text-blue-900 mb-1" }, "💡 How it works:"),
+          React.createElement("p", { className: "text-blue-800 mb-2" }, 
+            "Scores are scraped from ESPN.com using a CORS proxy. Auto-refreshes every 3 minutes when this tab is active."
+          ),
+          React.createElement("p", { className: "text-blue-800 mb-2" }, 
+            `Found ${liveData.leaderboard.length} golfers in the leaderboard. `,
+            `Matched ${matchedPicks.filter(p => p.found).length} of ${currentWeekPicks.length} picks.`
+          ),
+          React.createElement("details", { className: "mt-2" },
+            React.createElement("summary", { className: "cursor-pointer font-semibold text-blue-900 hover:text-blue-700" }, "🔍 Debug: View Raw Data"),
+            React.createElement("div", { className: "mt-2 max-h-48 overflow-y-auto bg-white p-2 rounded text-[10px] font-mono" },
+              liveData.leaderboard.slice(0, 10).map((g, i) => 
+                React.createElement("div", { key: i, className: "mb-1" },
+                  `${g.position} | ${g.name} | Score: ${g.score} | Thru: ${g.thru}`
+                )
+              )
+            )
+          )
+        )
+      )
+    );
+  }
+
+// Hamburger Menu Navigation Component
+function HamburgerNav({ activeTab, onTabChange, onClose }) {
+  return (
+    React.createElement("div", { 
+      className: "fixed inset-0 bg-black bg-opacity-50 z-50",
+      onClick: onClose
+    },
+      React.createElement("div", {
+        className: "fixed left-0 top-0 bottom-0 w-64 bg-white shadow-2xl transform transition-transform",
+        onClick: (e) => e.stopPropagation()
+      },
+        React.createElement("div", { className: "bg-blue-900 text-white p-4" },
+          React.createElement("div", { className: "flex items-center justify-between" },
+            React.createElement("h2", { className: "text-xl font-bold" }, "⛳ Fantasy Golf"),
+            React.createElement("button", {
+              onClick: onClose,
+              className: "text-white text-2xl hover:text-gray-300"
+            }, "×")
+          )
+        ),
+        React.createElement("nav", { className: "py-2" },
+          [
+            { id: "week", label: "This Week", icon: "📅" },
+            { id: "live", label: "Live Scores", icon: "🔴" },
+            { id: "picks", label: "Picks Used", icon: "📋" },
+            { id: "standings", label: "Standings", icon: "🏆" },
+            { id: "history", label: "History", icon: "📜" }
+          ].map(tab => 
+            React.createElement("button", {
+              key: tab.id,
+              onClick: () => { onTabChange(tab.id); onClose(); },
+              className: clsx(
+                "w-full text-left px-6 py-3 flex items-center gap-3 transition-colors",
+                activeTab === tab.id 
+                  ? "bg-blue-50 text-blue-900 font-semibold border-l-4 border-blue-900" 
+                  : "text-gray-700 hover:bg-gray-50"
+              )
+            },
+              React.createElement("span", { className: "text-xl" }, tab.icon),
+              React.createElement("span", null, tab.label)
+            )
+          )
+        )
+      )
+    )
+  );
+}
+
+// Season Map Component
+function SeasonMap({ tournaments, historical, currentTournament }) {
+  const [selectedTournament, setSelectedTournament] = useState(null);
+
+  // Process tournaments for mapping
+  const tournamentMarkers = useMemo(() => {
+    return tournaments
+      .map((t, idx) => {
+        const coords = t['Tournament Location'];
+        if (!coords || typeof coords !== 'string') return null;
+        
+        const [lat, lng] = coords.split(',').map(s => parseFloat(s.trim()));
+        if (isNaN(lat) || isNaN(lng)) return null;
+
+        const isCurrent = t['Tournament Name'] === currentTournament?.['Tournament Name'];
+        const isPast = historical.some(h => h.Tournament === t['Tournament Name']);
+        
+        return {
+          name: t['Tournament Name'],
+          lat,
+          lng,
+          week: idx + 1,
+          isCurrent,
+          isPast,
+          startDate: t['Tournament Start Date'],
+          endDate: t['Tournament End Date'],
+          purse: t['Tournament Purse']
+        };
+      })
+      .filter(Boolean);
+  }, [tournaments, historical, currentTournament]);
+
+  // US Map bounds
+  const mapBounds = {
+    north: 50,
+    south: 24,
+    east: -65,
+    west: -125
+  };
+
+  // Convert lat/lng to pixel position on a 800x500 map
+  const coordsToPixels = (lat, lng) => {
+    const x = ((lng - mapBounds.west) / (mapBounds.east - mapBounds.west)) * 800;
+    const y = ((mapBounds.north - lat) / (mapBounds.north - mapBounds.south)) * 500;
+    return { x, y };
+  };
+
+  const formatDate = (dateStr) => {
+    if (!dateStr) return '';
+    const d = new Date(dateStr);
+    return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+  };
+
+  return (
+    React.createElement("section", { className: "px-4 pt-4 pb-20" },
+      React.createElement("h2", { className: "text-blue-900 font-bold text-lg mb-2" }, "🗺️ PGA Tour Season Map"),
+      React.createElement("p", { className: "text-sm text-gray-600 mb-4" }, 
+        "Track the 2026 PGA Tour season across America"
+      ),
+
+      // Legend
+      React.createElement("div", { className: "flex flex-wrap gap-3 mb-4 text-xs" },
+        React.createElement("div", { className: "flex items-center gap-2" },
+          React.createElement("div", { className: "w-6 h-6 rounded-full bg-red-500 flex items-center justify-center text-white font-bold shadow-lg" }, "•"),
+          React.createElement("span", null, "Current Week")
+        ),
+        React.createElement("div", { className: "flex items-center gap-2" },
+          React.createElement("div", { className: "w-4 h-4 rounded-full bg-gray-400 flex items-center justify-center text-white text-xs" }, "•"),
+          React.createElement("span", null, "Completed")
+        ),
+        React.createElement("div", { className: "flex items-center gap-2" },
+          React.createElement("div", { className: "w-4 h-4 rounded-full bg-blue-500 flex items-center justify-center text-white text-xs" }, "•"),
+          React.createElement("span", null, "Upcoming")
+        )
+      ),
+
+      // Map Container
+      React.createElement("div", { className: "bg-white border-2 border-gray-300 rounded-xl overflow-hidden shadow-lg mb-4 relative" },
+        // Background map image (using OpenStreetMap tiles or simple US map)
+        React.createElement("div", { 
+          className: "relative w-full bg-gradient-to-br from-blue-50 to-green-50",
+          style: { height: '500px' }
+        },
+          // US Map outline (simplified SVG)
+          React.createElement("svg", {
+            viewBox: "0 0 800 500",
+            className: "absolute inset-0 w-full h-full opacity-20"
+          },
+            React.createElement("text", {
+              x: "400",
+              y: "250",
+              textAnchor: "middle",
+              className: "text-6xl fill-gray-300 font-bold"
+            }, "USA")
+          ),
+
+          // Tournament markers
+          tournamentMarkers.map((marker, idx) => {
+            const pos = coordsToPixels(marker.lat, marker.lng);
+            const isSelected = selectedTournament?.name === marker.name;
+
+            return React.createElement("div", {
+              key: idx,
+              className: "absolute transform -translate-x-1/2 -translate-y-1/2 cursor-pointer transition-all hover:scale-110",
+              style: { left: `${pos.x}px`, top: `${pos.y}px` },
+              onClick: () => setSelectedTournament(isSelected ? null : marker)
+            },
+              marker.isCurrent 
+                ? React.createElement("div", { className: "relative" },
+                    React.createElement("div", { className: "w-12 h-12 rounded-full bg-red-500 flex items-center justify-center text-white font-bold shadow-xl border-4 border-white animate-pulse" },
+                      React.createElement("span", { className: "text-xs" }, "W", marker.week)
+                    ),
+                    React.createElement("div", { className: "absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-0 h-0 border-l-4 border-r-4 border-t-8 border-l-transparent border-r-transparent border-t-red-500" })
+                  )
+                : marker.isPast
+                ? React.createElement("div", { className: clsx(
+                    "w-8 h-8 rounded-full bg-gray-400 flex items-center justify-center text-white font-bold shadow-lg border-2 border-white",
+                    isSelected && "ring-4 ring-blue-500"
+                  ) },
+                    React.createElement("span", { className: "text-[10px]" }, marker.week)
+                  )
+                : React.createElement("div", { className: clsx(
+                    "w-8 h-8 rounded-full bg-blue-500 flex items-center justify-center text-white font-bold shadow-lg border-2 border-white",
+                    isSelected && "ring-4 ring-blue-300"
+                  ) },
+                    React.createElement("span", { className: "text-[10px]" }, marker.week)
+                  )
+            );
+          })
+        )
+      ),
+
+      // Selected tournament info
+      selectedTournament && React.createElement("div", { className: "bg-white border-2 border-blue-500 rounded-xl p-4 shadow-lg mb-4" },
+        React.createElement("div", { className: "flex items-start justify-between mb-2" },
+          React.createElement("div", null,
+            React.createElement("h3", { className: "font-bold text-blue-900 text-lg" }, selectedTournament.name),
+            React.createElement("p", { className: "text-sm text-gray-600" },
+              "Week ", selectedTournament.week, " • ",
+              formatDate(selectedTournament.startDate), " - ", formatDate(selectedTournament.endDate)
+            )
+          ),
+          React.createElement("button", {
+            onClick: () => setSelectedTournament(null),
+            className: "text-gray-400 hover:text-gray-600 text-xl"
+          }, "×")
+        ),
+        selectedTournament.purse && React.createElement("div", { className: "flex items-center gap-2 text-sm" },
+          React.createElement("span", null, "💰"),
+          React.createElement("span", { className: "font-semibold" }, "Purse: ", currency(selectedTournament.purse))
+        ),
+        selectedTournament.isCurrent && React.createElement("div", { className: "mt-2 bg-red-50 border border-red-200 rounded px-3 py-2 text-sm text-red-900 font-semibold" },
+          "🔴 Tournament In Progress"
+        ),
+        selectedTournament.isPast && React.createElement("div", { className: "mt-2 bg-gray-50 border border-gray-200 rounded px-3 py-2 text-sm text-gray-700" },
+          "✓ Completed"
+        )
+      ),
+
+      // Tournament List
+      React.createElement("div", { className: "bg-white border border-gray-200 rounded-xl p-4" },
+        React.createElement("h3", { className: "font-semibold text-gray-900 mb-3" }, "2026 Schedule"),
+        React.createElement("div", { className: "space-y-2 max-h-96 overflow-y-auto" },
+          tournamentMarkers.map((marker, idx) =>
+            React.createElement("div", {
+              key: idx,
+              className: clsx(
+                "flex items-center gap-3 p-2 rounded-lg cursor-pointer transition-colors",
+                marker.isCurrent && "bg-red-50 border border-red-200",
+                marker.isPast && !marker.isCurrent && "bg-gray-50",
+                !marker.isPast && !marker.isCurrent && "hover:bg-blue-50"
+              ),
+              onClick: () => setSelectedTournament(marker)
+            },
+              React.createElement("div", { className: clsx(
+                "w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-xs flex-shrink-0",
+                marker.isCurrent && "bg-red-500",
+                marker.isPast && !marker.isCurrent && "bg-gray-400",
+                !marker.isPast && !marker.isCurrent && "bg-blue-500"
+              ) }, marker.week),
+              React.createElement("div", { className: "flex-1 min-w-0" },
+                React.createElement("p", { className: "font-semibold text-sm truncate" }, marker.name),
+                React.createElement("p", { className: "text-xs text-gray-600" },
+                  formatDate(marker.startDate), " - ", formatDate(marker.endDate)
+                )
+              ),
+              marker.isCurrent && React.createElement("span", { className: "text-red-600 text-xs font-semibold" }, "NOW")
+            )
+          )
+        )
+      )
+    )
+  );
+}
+
+
+  // Enhanced ThisWeek component with pick order, weather, and tournament info
+  function ThisWeek({ leaderName, currentWeekPicks, currentTournament, historical, members }) {
+    const [weatherData, setWeatherData] = useState(null);
+    const [loadingWeather, setLoadingWeather] = useState(false);
+
+    const formatDate = (dateValue) => {
+      if (!dateValue) return '';
+      let date;
+      if (typeof dateValue === 'string') {
+        date = new Date(dateValue);
+      } else if (dateValue instanceof Date) {
+        date = dateValue;
+      } else {
+        return '';
+      }
+      if (isNaN(date.getTime())) return '';
+      return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' });
+    };
+
+    // Calculate pick order based on previous tournament results
+    // HIGHEST earnings picks first, with tie-breaker going back weeks
+    const pickOrder = useMemo(() => {
+      if (!currentTournament || !historical || historical.length === 0) {
+        return members; // Default order
+      }
+
+      const tournaments = [...new Set(historical.map(h => h.Tournament))];
+      const currentIdx = tournaments.indexOf(currentTournament['Tournament Name']);
+      
+      if (currentIdx <= 0) {
+        return members; // First tournament
+      }
+
+      // Build earnings history for each player
+      const playerEarnings = {};
+      members.forEach(m => {
+        playerEarnings[m] = tournaments.slice(0, currentIdx).map(t => {
+          const pick = historical.find(h => h.Player === m && h.Tournament === t);
+          return pick?.Results || 0;
+        }).reverse(); // Most recent first
+      });
+
+      // Sort players by earnings with tie-breaker
+      const sorted = members.slice().sort((a, b) => {
+        const aEarnings = playerEarnings[a];
+        const bEarnings = playerEarnings[b];
+        
+        // Compare week by week, starting from most recent
+        for (let i = 0; i < Math.max(aEarnings.length, bEarnings.length); i++) {
+          const aVal = aEarnings[i] || 0;
+          const bVal = bEarnings[i] || 0;
+          if (aVal !== bVal) {
+            return bVal - aVal; // HIGHEST first
+          }
+        }
+        return 0; // Complete tie
+      });
+
+      return sorted;
+    }, [currentTournament, historical, members]);
+
+    // Get location coordinates
+    const getLocationCoords = () => {
+      if (!currentTournament) return null;
+      
+      // First try Latitude and Longitude fields
+      const lat = currentTournament['Latitude'];
+      const lng = currentTournament['Longitude'];
+      if (lat && lng && !isNaN(lat) && !isNaN(lng)) {
+        return { lat, lng };
+      }
+      
+      // Fallback to Tournament Location
+      const loc = currentTournament['Tournament Location'];
+      if (typeof loc === 'string' && loc.includes(',')) {
+        const [locLat, locLng] = loc.split(',').map(s => parseFloat(s.trim()));
+        if (!isNaN(locLat) && !isNaN(locLng)) return { lat: locLat, lng: locLng };
+      }
+      
+      return null;
+    };
+
+    const coords = getLocationCoords();
+
+    // Fetch weather data using Open-Meteo (free, no API key needed)
+    useEffect(() => {
+      if (coords && !weatherData) {
+        setLoadingWeather(true);
+        fetch(`https://api.open-meteo.com/v1/forecast?latitude=${coords.lat}&longitude=${coords.lng}&current=temperature_2m,weathercode,windspeed_10m&temperature_unit=fahrenheit&windspeed_unit=mph&timezone=America%2FNew_York`)
+          .then(res => res.json())
+          .then(data => {
+            setWeatherData(data.current);
+            setLoadingWeather(false);
+          })
+          .catch(err => {
+            console.error('Weather fetch failed:', err);
+            setLoadingWeather(false);
+          });
+      }
+    }, [coords]);
+
+    // Weather code to description
+    const getWeatherDesc = (code) => {
+      const weatherCodes = {
+        0: '☀️ Clear', 1: '🌤️ Mostly Clear', 2: '⛅ Partly Cloudy', 3: '☁️ Cloudy',
+        45: '🌫️ Foggy', 48: '🌫️ Foggy', 51: '🌧️ Light Rain', 61: '🌧️ Rain',
+        80: '🌧️ Showers', 95: '⛈️ Thunderstorm'
+      };
+      return weatherCodes[code] || '🌤️ Fair';
+    };
+
+    const sortedPicks = [...currentWeekPicks].sort((a, b) => {
+      const aIdx = pickOrder.indexOf(a.Player);
+      const bIdx = pickOrder.indexOf(b.Player);
+      return aIdx - bIdx;
+    });
+
+    // Get tournament info from PGA (stored data or defaults)
+    const tournamentInfo = useMemo(() => {
+      const name = currentTournament?.['Tournament Name'] || '';
+      
+      // Get Deep Cut Fact from CSV if available
+      const deepCutFact = currentTournament?.['Deep Cut Fact'] || null;
+      
+      return {
+        course: currentTournament?.['Course'] || 'TBD',
+        city: currentTournament?.['City'] ? `${currentTournament['City']}, ${currentTournament['State']}` : 'Location TBD',
+        defending: 'TBD',
+        trivia: deepCutFact
+      };
+    }, [currentTournament]);
+
+    return (
+      React.createElement("section", { className: "px-4 pt-4" },
+        // Tournament Header Card
+        React.createElement("div", { className: "bg-gradient-to-r from-blue-900 to-blue-800 rounded-xl p-4 text-white mb-4 shadow-lg" },
+          React.createElement("h2", { className: "text-xl font-bold mb-2" }, 
+            currentTournament ? currentTournament['Tournament Name'] : 'Current Tournament'
+          ),
+          currentTournament && React.createElement("div", { className: "space-y-1.5 text-sm opacity-95" },
+            React.createElement("div", { className: "flex items-center gap-2" },
+              React.createElement("span", null, "📅"),
+              React.createElement("span", null,
+                formatDate(currentTournament['Tournament Start Date']), " - ", 
+                formatDate(currentTournament['Tournament End Date'])
+              )
+            ),
+            tournamentInfo.city !== 'Location TBD' && React.createElement("div", { className: "flex items-center gap-2" },
+              React.createElement("span", null, "📍"),
+              React.createElement("span", null, tournamentInfo.city)
+            ),
+            tournamentInfo.course !== 'TBD' && React.createElement("div", { className: "flex items-center gap-2" },
+              React.createElement("span", null, "⛳"),
+              React.createElement("span", null, tournamentInfo.course)
+            ),
+            currentTournament['Tournament Purse'] && React.createElement("div", { className: "flex items-center gap-2" },
+              React.createElement("span", null, "💰"),
+              React.createElement("span", null, "Purse: ", currency(currentTournament['Tournament Purse']))
+            )
+          )
+        ),
+
+        // Weather & Location Row
+        React.createElement("div", { className: "grid grid-cols-1 gap-3 mb-4" },
+          // Weather Card
+          coords && React.createElement("div", { className: "bg-white border border-gray-200 rounded-lg p-3 shadow-sm" },
+            React.createElement("h3", { className: "text-sm font-semibold text-gray-700 mb-2 flex items-center gap-2" },
+              React.createElement("span", null, "🌤️"),
+              React.createElement("span", null, "Current Weather")
+            ),
+            loadingWeather ? React.createElement("p", { className: "text-xs text-gray-500" }, "Loading...") :
+            weatherData ? React.createElement("div", { className: "flex items-center justify-between" },
+              React.createElement("div", null,
+                React.createElement("p", { className: "text-2xl font-bold text-blue-900" }, 
+                  Math.round(weatherData.temperature_2m), "°F"
+                ),
+                React.createElement("p", { className: "text-xs text-gray-600" }, 
+                  getWeatherDesc(weatherData.weathercode)
+                )
+              ),
+              React.createElement("div", { className: "text-right text-xs text-gray-600" },
+                React.createElement("p", null, "Wind: ", Math.round(weatherData.windspeed_10m), " mph")
+              )
+            ) : React.createElement("p", { className: "text-xs text-gray-500" }, "Weather unavailable")
+          ),
+
+        ),
+
+        // Tournament Info Cards
+        React.createElement("div", { className: "grid grid-cols-2 gap-3 mb-4" },
+          tournamentInfo.defending !== 'TBD' && React.createElement("div", { className: "bg-green-50 border border-green-200 rounded-lg p-3" },
+            React.createElement("p", { className: "text-xs text-green-700 font-semibold mb-1" }, "🏆 Defending Champ"),
+            React.createElement("p", { className: "text-sm font-bold text-green-900" }, tournamentInfo.defending)
+          ),
+          React.createElement("div", { className: "bg-blue-50 border border-blue-200 rounded-lg p-3" },
+            React.createElement("p", { className: "text-xs text-blue-700 font-semibold mb-1" }, "📊 Field Size"),
+            React.createElement("p", { className: "text-sm font-bold text-blue-900" }, "132 Players")
+          )
+        ),
+
+        // Trivia (if available)
+        tournamentInfo.trivia && React.createElement("div", { className: "bg-purple-50 border-l-4 border-purple-400 p-3 mb-4 rounded" },
+          React.createElement("p", { className: "text-xs font-semibold text-purple-900 mb-1" }, "💡 Did You Know?"),
+          React.createElement("p", { className: "text-sm text-purple-800" }, tournamentInfo.trivia)
+        ),
+
+        // Season Leader
+        leaderName && React.createElement("div", { className: "bg-yellow-50 border-l-4 border-yellow-400 p-3 mb-4 rounded" },
+          React.createElement("p", { className: "text-sm" },
+            React.createElement("span", { className: "font-semibold text-yellow-900" }, "👑 Season Leader: "),
+            React.createElement("span", { className: "text-yellow-800" }, leaderName)
+          )
+        ),
+
+        // Pick Order Section
+        React.createElement("div", { className: "bg-white border-2 border-blue-200 rounded-xl p-4 mb-4 shadow-sm" },
+          React.createElement("h3", { className: "font-bold text-blue-900 mb-2 flex items-center gap-2" },
+            React.createElement("span", { className: "text-lg" }, "📋"),
+            React.createElement("span", null, "Pick Order")
+          ),
+          React.createElement("p", { className: "text-xs text-gray-600 mb-3" }, 
+            "Based on previous tournament results (lowest earnings pick first)"
+          ),
+          React.createElement("div", { className: "space-y-2" },
+            pickOrder.map((playerName, idx) => {
+              const pick = currentWeekPicks.find(p => p.Player === playerName);
+              return React.createElement("div", {
+                key: playerName,
+                className: clsx(
+                  "flex items-center gap-3 p-2 rounded-lg",
+                  pick ? "bg-green-50 border border-green-200" : "bg-gray-50 border border-gray-200"
+                )
+              },
+                React.createElement("div", { className: "w-8 h-8 rounded-full bg-blue-900 text-white flex items-center justify-center font-bold text-sm flex-shrink-0" },
+                  idx + 1
+                ),
+                React.createElement("div", { className: "flex-1" },
+                  React.createElement("div", { className: "font-semibold text-sm" }, playerName),
+                  pick && React.createElement("div", { className: "text-xs text-gray-600" }, 
+                    "✓ ", pick.Pick
+                  )
+                ),
+                pick ? React.createElement("span", { className: "text-green-600 text-xs font-semibold" }, "Picked") :
+                       React.createElement("span", { className: "text-gray-400 text-xs" }, "Pending")
+              );
+            })
+          )
+        ),
+
+        // Picks Summary
+        React.createElement("p", { className: "text-xs text-gray-600 text-center mb-16" }, 
+          `${currentWeekPicks.length} of ${members.length} picks submitted`
+        )
+      )
+    );
+  }
+
+
+  function Standings({ historical, members, currentTournament }) {
+    const tournaments = [...new Set(historical.map(h => h.Tournament))];
+    const currentIdx = tournaments.indexOf(currentTournament?.['Tournament Name']);
+    const displayTournaments = currentIdx >= 0 ? tournaments.slice(0, currentIdx + 1) : tournaments;
+    
+    const firstHalfCount = Math.min(16, Math.floor(displayTournaments.length / 2));
+    const firstHalfTournaments = displayTournaments.slice(0, firstHalfCount);
+    const secondHalfTournaments = displayTournaments.slice(firstHalfCount);
+
+    const rows = useMemo(() => {
+      const arr = members.map((name) => {
+        const playerHistory = historical.filter(h => h.Player === name);
+        
+        const firstHalf = firstHalfTournaments.reduce((sum, t) => {
+          const pick = playerHistory.find(h => h.Tournament === t);
+          return sum + (pick?.Results || 0);
+        }, 0);
+        
+        const secondHalf = secondHalfTournaments.reduce((sum, t) => {
+          const pick = playerHistory.find(h => h.Tournament === t);
+          return sum + (pick?.Results || 0);
+        }, 0);
+        
+        const season = firstHalf + secondHalf;
+        
+        return { name, firstHalf, secondHalf, season };
+      });
+      arr.sort((a, b) => b.season - a.season);
+      return arr.map((r, i) => ({ rank: i + 1, ...r }));
+    }, [historical, members, displayTournaments, firstHalfTournaments, secondHalfTournaments]);
+    
+    const firstHalfWinner = useMemo(() => {
+      if (firstHalfTournaments.length === 0) return null;
+      const sorted = [...rows].sort((a, b) => b.firstHalf - a.firstHalf);
+      return sorted[0]?.firstHalf > 0 ? sorted[0] : null;
+    }, [rows, firstHalfTournaments]);
+    
+    const secondHalfWinner = useMemo(() => {
+      if (secondHalfTournaments.length === 0) return null;
+      const sorted = [...rows].sort((a, b) => b.secondHalf - a.secondHalf);
+      return sorted[0]?.secondHalf > 0 ? sorted[0] : null;
+    }, [rows, secondHalfTournaments]);
+    
+    const seasonChampion = rows.length > 0 && rows[0].season > 0 ? rows[0] : null;
+
+    return (
+      React.createElement("section", { className: "px-4 pt-4" },
+        React.createElement("h2", { className: "text-blue-900 font-bold text-lg mb-3" }, "Season Standings"),
+        
+        React.createElement("div", { className: "overflow-x-auto mb-4" },
+          React.createElement("div", { className: "overflow-hidden rounded-xl border" },
+            React.createElement("table", { className: "text-sm w-full" },
+              React.createElement("thead", { className: "bg-blue-900 text-white" },
+                React.createElement("tr", null,
+                  React.createElement("th", { className: "text-left px-3 py-2 w-16" }, "Rank"),
+                  React.createElement("th", { className: "text-left px-3 py-2" }, "Player"),
+                  React.createElement("th", { className: "text-right px-3 py-2 w-24" }, "1st Half"),
+                  React.createElement("th", { className: "text-right px-3 py-2 w-24" }, "2nd Half"),
+                  React.createElement("th", { className: "text-right px-3 py-2 font-bold w-24" }, "Season")
+                )
+              ),
+              React.createElement("tbody", null,
+                rows.map((r) =>
+                  React.createElement("tr", { key: r.rank, className: "odd:bg-white even:bg-gray-50" },
+                    React.createElement("td", { className: "px-3 py-2 font-semibold text-blue-900" }, r.rank),
+                    React.createElement("td", { className: "px-3 py-2" }, r.name),
+                    React.createElement("td", { className: "px-3 py-2 text-right" }, 
+                      r.firstHalf > 0 ? currency(r.firstHalf) : "$0"
+                    ),
+                    React.createElement("td", { className: "px-3 py-2 text-right" }, 
+                      r.secondHalf > 0 ? currency(r.secondHalf) : "$0"
+                    ),
+                    React.createElement("td", { className: "px-3 py-2 text-right font-semibold" }, 
+                      r.season > 0 ? currency(r.season) : "$0"
+                    )
+                  )
+                )
+              )
+            )
+          )
+        ),
+        
+        React.createElement("div", { className: "grid grid-cols-1 md:grid-cols-3 gap-3 mb-16" },
+          firstHalfWinner && React.createElement("div", { className: "bg-gradient-to-br from-yellow-50 to-yellow-100 border-2 border-yellow-400 rounded-xl p-4" },
+            React.createElement("div", { className: "text-center" },
+              React.createElement("div", { className: "text-3xl mb-1" }, "🥇"),
+              React.createElement("div", { className: "text-xs text-yellow-700 font-semibold mb-1" }, "1st Half Winner"),
+              React.createElement("div", { className: "text-lg font-bold text-yellow-900" }, firstHalfWinner.name),
+              React.createElement("div", { className: "text-sm text-yellow-800" }, currency(firstHalfWinner.firstHalf))
+            )
+          ),
+          
+          secondHalfWinner && React.createElement("div", { className: "bg-gradient-to-br from-blue-50 to-blue-100 border-2 border-blue-400 rounded-xl p-4" },
+            React.createElement("div", { className: "text-center" },
+              React.createElement("div", { className: "text-3xl mb-1" }, "🥈"),
+              React.createElement("div", { className: "text-xs text-blue-700 font-semibold mb-1" }, "2nd Half Winner"),
+              React.createElement("div", { className: "text-lg font-bold text-blue-900" }, secondHalfWinner.name),
+              React.createElement("div", { className: "text-sm text-blue-800" }, currency(secondHalfWinner.secondHalf))
+            )
+          ),
+          
+          seasonChampion && React.createElement("div", { className: "bg-gradient-to-br from-green-50 to-green-100 border-2 border-green-500 rounded-xl p-4" },
+            React.createElement("div", { className: "text-center" },
+              React.createElement("div", { className: "text-3xl mb-1" }, "🏆"),
+              React.createElement("div", { className: "text-xs text-green-700 font-semibold mb-1" }, "Season Champion"),
+              React.createElement("div", { className: "text-lg font-bold text-green-900" }, seasonChampion.name),
+              React.createElement("div", { className: "text-sm text-green-800" }, currency(seasonChampion.season))
+            )
+          )
+        ),
+        
+        React.createElement("p", { className: "text-xs text-gray-600 mt-3 mb-4" }, 
+          `Showing ${displayTournaments.length} tournament${displayTournaments.length !== 1 ? 's' : ''} (First ${firstHalfCount} = 1st Half)`
+        )
+      )
+    );
+  }
+
+  function History({ historical }) {
+    const tournaments = [...new Set(historical.map(h => h.Tournament))];
+    const players = [...new Set(historical.map(h => h.Player))].sort();
+    
+    const [selectedTournament, setSelectedTournament] = useState('');
+    const [selectedPlayer, setSelectedPlayer] = useState('');
+    
+    const displayData = useMemo(() => {
+      const firstHalfCount = Math.min(16, Math.floor(tournaments.length / 2));
+      const firstHalfTournaments = tournaments.slice(0, firstHalfCount);
+      const secondHalfTournaments = tournaments.slice(firstHalfCount);
+      
+      if (selectedPlayer && !selectedTournament) {
+        const playerHistory = historical.filter(h => h.Player === selectedPlayer);
+        return {
+          type: 'player-detail',
+          rows: tournaments.map(t => {
+            const pick = playerHistory.find(h => h.Tournament === t);
+            return { tournament: t, golfer: pick?.Pick || '—', earnings: pick?.Results || 0 };
+          })
+        };
+      }
+      
+      if (selectedTournament && !selectedPlayer) {
+        const tournamentPicks = historical.filter(h => h.Tournament === selectedTournament);
+        return {
+          type: 'tournament-detail',
+          rows: players.map(p => {
+            const pick = tournamentPicks.find(h => h.Player === p);
+            return { player: p, golfer: pick?.Pick || '—', earnings: pick?.Results || 0 };
+          }).sort((a, b) => b.earnings - a.earnings)
+        };
+      }
+      
+      if (selectedPlayer && selectedTournament) {
+        const pick = historical.find(h => h.Player === selectedPlayer && h.Tournament === selectedTournament);
+        return {
+          type: 'single',
+          rows: pick ? [{ player: pick.Player, tournament: pick.Tournament, golfer: pick.Pick, earnings: pick.Results || 0 }] : []
+        };
+      }
+      
+      return {
+        type: 'season-summary',
+        rows: players.map(p => {
+          const playerHistory = historical.filter(h => h.Player === p);
+          const firstHalf = firstHalfTournaments.reduce((sum, t) => {
+            const pick = playerHistory.find(h => h.Tournament === t);
+            return sum + (pick?.Results || 0);
+          }, 0);
+          const secondHalf = secondHalfTournaments.reduce((sum, t) => {
+            const pick = playerHistory.find(h => h.Tournament === t);
+            return sum + (pick?.Results || 0);
+          }, 0);
+          return { player: p, firstHalf, secondHalf, season: firstHalf + secondHalf };
+        }).sort((a, b) => b.season - a.season)
+      };
+    }, [historical, tournaments, players, selectedPlayer, selectedTournament]);
+
+    return (
+      React.createElement("section", { className: "px-4 pt-4" },
+        React.createElement("h2", { className: "text-blue-900 font-bold text-lg mb-3" }, "Pick History"),
+        
+        React.createElement("div", { className: "space-y-2 mb-3" },
+          React.createElement("div", null,
+            React.createElement("label", { className: "block text-sm text-gray-700 mb-1" }, "Filter by player:"),
+            React.createElement("select", {
+              value: selectedPlayer,
+              onChange: (e) => setSelectedPlayer(e.target.value),
+              className: "w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+            },
+              React.createElement("option", { value: "" }, "All Players"),
+              players.map(p => React.createElement("option", { key: p, value: p }, p))
+            )
+          ),
+          React.createElement("div", null,
+            React.createElement("label", { className: "block text-sm text-gray-700 mb-1" }, "Filter by tournament:"),
+            React.createElement("select", {
+              value: selectedTournament,
+              onChange: (e) => setSelectedTournament(e.target.value),
+              className: "w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+            },
+              React.createElement("option", { value: "" }, "All Tournaments"),
+              tournaments.map(t => React.createElement("option", { key: t, value: t }, t))
+            )
+          )
+        ),
+
+        React.createElement("div", { className: "overflow-hidden rounded-xl border" },
+          React.createElement("table", { className: "w-full text-sm" },
+            React.createElement("thead", { className: "bg-blue-900 text-white" },
+              React.createElement("tr", null,
+                displayData.type === 'season-summary' ? [
+                  React.createElement("th", { key: "player", className: "text-left px-3 py-2" }, "Player"),
+                  React.createElement("th", { key: "first", className: "text-right px-3 py-2" }, "1st Half"),
+                  React.createElement("th", { key: "second", className: "text-right px-3 py-2" }, "2nd Half"),
+                  React.createElement("th", { key: "season", className: "text-right px-3 py-2" }, "Season Total")
+                ] : displayData.type === 'player-detail' ? [
+                  React.createElement("th", { key: "tournament", className: "text-left px-3 py-2" }, "Tournament"),
+                  React.createElement("th", { key: "golfer", className: "text-left px-3 py-2" }, "Golfer"),
+                  React.createElement("th", { key: "earnings", className: "text-right px-3 py-2" }, "Earnings")
+                ] : displayData.type === 'tournament-detail' ? [
+                  React.createElement("th", { key: "player", className: "text-left px-3 py-2" }, "Player"),
+                  React.createElement("th", { key: "golfer", className: "text-left px-3 py-2" }, "Golfer"),
+                  React.createElement("th", { key: "earnings", className: "text-right px-3 py-2" }, "Earnings")
+                ] : [
+                  React.createElement("th", { key: "player", className: "text-left px-3 py-2" }, "Player"),
+                  React.createElement("th", { key: "tournament", className: "text-left px-3 py-2" }, "Tournament"),
+                  React.createElement("th", { key: "golfer", className: "text-left px-3 py-2" }, "Golfer"),
+                  React.createElement("th", { key: "earnings", className: "text-right px-3 py-2" }, "Earnings")
+                ]
+              )
+            ),
+            React.createElement("tbody", null,
+              displayData.rows.length > 0 ? displayData.rows.map((row, idx) =>
+                React.createElement("tr", { key: idx, className: "odd:bg-white even:bg-gray-50" },
+                  displayData.type === 'season-summary' ? [
+                    React.createElement("td", { key: "player", className: "px-3 py-2 font-semibold" }, row.player),
+                    React.createElement("td", { key: "first", className: "px-3 py-2 text-right" }, row.firstHalf > 0 ? currency(row.firstHalf) : "$0"),
+                    React.createElement("td", { key: "second", className: "px-3 py-2 text-right" }, row.secondHalf > 0 ? currency(row.secondHalf) : "$0"),
+                    React.createElement("td", { key: "season", className: "px-3 py-2 text-right font-bold" }, row.season > 0 ? currency(row.season) : "$0")
+                  ] : displayData.type === 'player-detail' ? [
+                    React.createElement("td", { key: "tournament", className: "px-3 py-2" }, row.tournament),
+                    React.createElement("td", { key: "golfer", className: "px-3 py-2" }, row.golfer),
+                    React.createElement("td", { key: "earnings", className: "px-3 py-2 text-right" }, row.earnings > 0 ? currency(row.earnings) : "$0")
+                  ] : displayData.type === 'tournament-detail' ? [
+                    React.createElement("td", { key: "player", className: "px-3 py-2" }, row.player),
+                    React.createElement("td", { key: "golfer", className: "px-3 py-2" }, row.golfer),
+                    React.createElement("td", { key: "earnings", className: "px-3 py-2 text-right" }, row.earnings > 0 ? currency(row.earnings) : "$0")
+                  ] : [
+                    React.createElement("td", { key: "player", className: "px-3 py-2" }, row.player),
+                    React.createElement("td", { key: "tournament", className: "px-3 py-2" }, row.tournament),
+                    React.createElement("td", { key: "golfer", className: "px-3 py-2" }, row.golfer),
+                    React.createElement("td", { key: "earnings", className: "px-3 py-2 text-right" }, row.earnings > 0 ? currency(row.earnings) : "$0")
+                  ]
+                )
+              ) : React.createElement("tr", null,
+                React.createElement("td", { colSpan: 4, className: "px-3 py-6 text-center text-gray-500" }, "No history found")
+              )
+            )
+          )
+        ),
+        React.createElement("p", { className: "text-xs text-gray-600 mt-3 mb-16" }, 
+          displayData.type === 'season-summary' ? `Showing season summary for all players (First 16 tournaments = 1st Half)` :
+          displayData.type === 'player-detail' ? `Showing tournament-by-tournament for ${selectedPlayer}` :
+          displayData.type === 'tournament-detail' ? `Showing all players at ${selectedTournament}` :
+          `Showing ${selectedPlayer} at ${selectedTournament}`
+        )
+      )
+    );
+  }
+
+  function PicksUsed({ picksUsedByPlayer, members }) {
+    const [selectedPlayer, setSelectedPlayer] = useState('all');
+    const [selectedGolfer, setSelectedGolfer] = useState('');
+    
+    // Get all unique golfers used across all players
+    const allGolfersUsed = useMemo(() => {
+      const golfers = new Set();
+      Object.values(picksUsedByPlayer).forEach(picks => {
+        picks.forEach(pick => golfers.add(pick));
+      });
+      return Array.from(golfers).sort();
+    }, [picksUsedByPlayer]);
+
+    const displayData = useMemo(() => {
+      // Filter by golfer: show which players picked that golfer
+      if (selectedGolfer) {
+        const playersWhoPicked = members.filter(player => {
+          const picks = picksUsedByPlayer[player] || [];
+          return picks.includes(selectedGolfer);
+        });
+        
+        return playersWhoPicked.map(player => ({
+          player,
+          picks: [selectedGolfer],
+          count: 1
+        }));
+      }
+      
+      // Filter by player or show all
+      if (selectedPlayer === 'all') {
+        return members.map(player => ({
+          player,
+          picks: picksUsedByPlayer[player] || [],
+          count: (picksUsedByPlayer[player] || []).length
+        }));
+      } else {
+        return [{
+          player: selectedPlayer,
+          picks: picksUsedByPlayer[selectedPlayer] || [],
+          count: (picksUsedByPlayer[selectedPlayer] || []).length
+        }];
+      }
+    }, [selectedPlayer, selectedGolfer, picksUsedByPlayer, members]);
+
+    return (
+      React.createElement("section", { className: "px-4 pt-4" },
+        React.createElement("h2", { className: "text-blue-900 font-bold text-lg mb-1" }, "Picks Used"),
+        React.createElement("p", { className: "text-sm text-gray-600 mb-3" }, 
+          "Track which golfers each player has used this season"
+        ),
+        
+        React.createElement("div", { className: "space-y-2 mb-3" },
+          React.createElement("div", null,
+            React.createElement("label", { className: "block text-sm text-gray-700 mb-1" }, "Filter by player:"),
+            React.createElement("select", {
+              value: selectedPlayer,
+              onChange: (e) => { setSelectedPlayer(e.target.value); setSelectedGolfer(''); },
+              className: "w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+            },
+              React.createElement("option", { value: "all" }, "All Players"),
+              members.map(m => React.createElement("option", { key: m, value: m }, m))
+            )
+          ),
+          React.createElement("div", null,
+            React.createElement("label", { className: "block text-sm text-gray-700 mb-1" }, "Filter by golfer:"),
+            React.createElement("select", {
+              value: selectedGolfer,
+              onChange: (e) => { setSelectedGolfer(e.target.value); if (e.target.value) setSelectedPlayer('all'); },
+              className: "w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
+            },
+              React.createElement("option", { value: "" }, "All Golfers"),
+              allGolfersUsed.map(g => React.createElement("option", { key: g, value: g }, g))
+            )
+          )
+        ),
+
+        React.createElement("div", { className: "space-y-3 mb-16" },
+          displayData.length > 0 ? displayData.map(data => 
+            React.createElement("div", {
+              key: data.player,
+              className: "bg-white border border-gray-200 rounded-lg p-4"
+            },
+              React.createElement("div", { className: "flex items-center justify-between mb-3 pb-2 border-b" },
+                React.createElement("h3", { className: "font-bold text-blue-900" }, data.player),
+                React.createElement("span", { className: "text-sm text-gray-600" }, 
+                  selectedGolfer ? `Picked ${selectedGolfer}` : `${data.count} golfer${data.count !== 1 ? 's' : ''} used`
+                )
+              ),
+              data.picks.length > 0 ? React.createElement("div", { className: "flex flex-wrap gap-2" },
+                data.picks.map(pick => 
+                  React.createElement("span", {
+                    key: pick,
+                    className: "inline-block bg-blue-50 text-blue-900 px-3 py-1 rounded-full text-sm"
+                  }, pick)
+                )
+              ) : React.createElement("p", { className: "text-sm text-gray-500 italic" }, "No picks yet")
+            )
+          ) : React.createElement("div", { className: "bg-gray-50 border border-gray-200 rounded-lg p-8 text-center" },
+            React.createElement("p", { className: "text-gray-600" }, 
+              selectedGolfer ? `No players have picked ${selectedGolfer}` : "No picks found"
+            )
+          )
+        ),
+
+        !selectedGolfer && selectedPlayer === 'all' && React.createElement("div", { className: "bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4 text-xs" },
+          React.createElement("p", { className: "font-semibold text-blue-900 mb-1" }, "📊 Season Stats:"),
+          React.createElement("p", { className: "text-blue-800" }, 
+            `Total unique golfers used: ${allGolfersUsed.length}`
+          )
+        )
+      )
+    );
+  }
+
+  ReactDOM.createRoot(document.getElementById("root")).render(React.createElement(App));
+  </script>
+</body>
+</html>
