@@ -188,13 +188,13 @@
     {
       "Player": "Andrew",
       "Tournament": "Pebble Beach Pro-Am",
-      "Pick": "",
+      "Pick": "Justin Rose",
       "Results": 0
     },
     {
       "Player": "Craig",
       "Tournament": "Pebble Beach Pro-Am",
-      "Pick": "",
+      "Pick": "Rory McIlroy",
       "Results": 0
     },
     {
@@ -224,7 +224,7 @@
     {
       "Player": "Phil",
       "Tournament": "Pebble Beach Pro-Am",
-      "Pick": "",
+      "Pick": "Brooks Koepka",
       "Results": 0
     },
     {
@@ -236,7 +236,7 @@
     {
       "Player": "Todd",
       "Tournament": "Pebble Beach Pro-Am",
-      "Pick": "",
+      "Pick": "Maverick McNealy",
       "Results": 0
     },
     {
@@ -3347,7 +3347,7 @@ function SeasonMap({ tournaments, historical, currentTournament }) {
             React.createElement("span", null, "Pick Order")
           ),
           React.createElement("p", { className: "text-xs text-gray-600 mb-3" }, 
-            "Based on previous tournament results (lowest earnings pick first)"
+            "Based on previous tournament results (highest earnings pick first)"
           ),
           React.createElement("div", { className: "space-y-2" },
             pickOrder.map((playerName, idx) => {
