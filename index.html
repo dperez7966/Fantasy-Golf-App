@@ -10,6 +10,10 @@
     .drag-over { border-color: #2563eb; background-color: #eff6ff; }
     @keyframes pulse-green { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
     .pulse-green { animation: pulse-green 2s ease-in-out infinite; }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    .fact-fade { transition: opacity 0.4s ease-in-out; }
+    .fact-hidden { opacity: 0; }
+    .fact-visible { opacity: 1; }
   </style>
 </head>
 <body class="bg-white text-gray-900">
@@ -313,39 +317,649 @@
     {"Player":"Todd","Tournament":"TOUR Championship","Pick":"","Results":0}
   ],
   "tournaments": [
-    {"Tournament Name":"The American Express","Course":"Pete Dye Stadium Course","City":"La Quinta","State":"CA","Country":"USA","Half":1,"Latitude":33.6631,"Longitude":-116.2931,"Tournament Location":null,"Tournament Start Date":"2026-01-22T00:00:00","Tournament End Date":"2026-01-25T00:00:00","Tournament Purse":9200000,"Deep Cut Fact":null},
-    {"Tournament Name":"Farmers Insurance Open","Course":"Torrey Pines Golf Couse (South Couse)","City":"San Diego","State":"CA","Country":"USA","Half":1,"Latitude":32.9037,"Longitude":-117.245,"Tournament Location":null,"Tournament Start Date":"2026-01-29T00:00:00","Tournament End Date":"2026-02-02T00:00:00","Tournament Purse":9600000,"Deep Cut Fact":"Torrey Pines South Course redesigned around Tiger Woods' game; 2008 U.S. Open win on torn ACL"},
-    {"Tournament Name":"WM Phoenix Open","Course":"TPC Scottsdale (Stadium Course)","City":"Scottsadle","State":"AZ","Country":"USA","Half":1,"Latitude":33.5462,"Longitude":-111.891,"Tournament Location":null,"Tournament Start Date":"2026-02-05T00:00:00","Tournament End Date":"2026-02-08T00:00:00","Tournament Purse":9600000,"Deep Cut Fact":"16th hole engineered for extreme crowd noise; security trained for crowd control first"},
-    {"Tournament Name":"Pebble Beach Pro-Am","Course":"Pebble Beach Golf Links","City":"Pebble Beach","State":"CA","Country":"USA","Half":1,"Latitude":36.5687,"Longitude":-121.9503,"Tournament Location":null,"Tournament Start Date":"2026-02-12T00:00:00","Tournament End Date":"2026-02-15T00:00:00","Tournament Purse":20000000,"Deep Cut Fact":"Tiger avoided entire career; pros historically hated amateur-controlled pace"},
-    {"Tournament Name":"The Genesis Invitational","Course":"The Riviera Country Club","City":"Pacific Palisades","State":"CA","Country":"USA","Half":1,"Latitude":34.0496,"Longitude":-118.5013,"Tournament Location":null,"Tournament Start Date":"2026-02-19T00:00:00","Tournament End Date":"2026-02-22T00:00:00","Tournament Purse":20000000,"Deep Cut Fact":null},
-    {"Tournament Name":"Cognizant Classic in the Palm Beaches","Course":"PGA National Resort (The Champion Course)","City":"Palm Beach Gardens","State":"FL","Country":"USA","Half":1,"Latitude":26.8258,"Longitude":-80.143,"Tournament Location":null,"Tournament Start Date":"2026-02-26T00:00:00","Tournament End Date":"2026-03-01T00:00:00","Tournament Purse":9600000,"Deep Cut Fact":null},
-    {"Tournament Name":"Arnold Palmer Invitational presented by Mastercard","Course":"Arnold Palmer's Bay Hill Club & Lodge","City":"Orlando","State":"FL","Country":"USA","Half":1,"Latitude":28.4889,"Longitude":-81.4931,"Tournament Location":null,"Tournament Start Date":"2026-03-05T00:00:00","Tournament End Date":"2026-03-08T00:00:00","Tournament Purse":20000000,"Deep Cut Fact":null},
-    {"Tournament Name":"THE PLAYERS Championship","Course":"TPC Sawgrass (THE PLAYERS Stadium Course)","City":"Ponte Vedra Beach","State":"FL ","Country":"USA","Half":1,"Latitude":30.2162,"Longitude":-81.5339,"Tournament Location":null,"Tournament Start Date":"2026-03-12T00:00:00","Tournament End Date":"2026-03-15T00:00:00","Tournament Purse":25000000,"Deep Cut Fact":"Island green was construction accident; players have bargaining power"},
-    {"Tournament Name":"Valspar Championship","Course":"Innisbrook Resort (Copperhead Course)","City":"Palm Harbor","State":"FL","Country":"USA","Half":1,"Latitude":28.1006,"Longitude":-82.7625,"Tournament Location":null,"Tournament Start Date":"2026-03-19T00:00:00","Tournament End Date":"2026-03-22T00:00:00","Tournament Purse":9100000,"Deep Cut Fact":"Closing stretch harder than Augusta's on average"},
-    {"Tournament Name":"Texas Children's Houston Open","Course":"Memorial Park Golf Course","City":"Houston","State":"TX","Country":"USA","Half":1,"Latitude":29.7604,"Longitude":-95.4037,"Tournament Location":null,"Tournament Start Date":"2026-03-26T00:00:00","Tournament End Date":"2026-03-29T00:00:00","Tournament Purse":9900000,"Deep Cut Fact":null},
-    {"Tournament Name":"Valero Texas Open","Course":"TPC San Antonio (Oaks Course)","City":"San Antonio","State":"TX","Country":"USA","Half":1,"Latitude":29.4056,"Longitude":-98.6549,"Tournament Location":null,"Tournament Start Date":"2026-04-02T00:00:00","Tournament End Date":"2026-04-05T00:00:00","Tournament Purse":9800000,"Deep Cut Fact":"Most last-minute Masters qualifiers; built on quarry pits"},
-    {"Tournament Name":"Masters Tournament","Course":"Augusta National Golf Club","City":"Augusta","State":"GA","Country":"USA","Half":1,"Latitude":33.5021,"Longitude":-82.02,"Tournament Location":null,"Tournament Start Date":"2026-04-09T00:00:00","Tournament End Date":"2026-04-12T00:00:00","Tournament Purse":0,"Deep Cut Fact":"Employs more meteorologists than some airports; green jackets never owned"},
-    {"Tournament Name":"RBC Heritage","Course":"Harbour Town Golf Links","City":"Hilton Head ","State":"SC","Country":"USA","Half":1,"Latitude":32.2122,"Longitude":-80.7526,"Tournament Location":null,"Tournament Start Date":"2026-04-16T00:00:00","Tournament End Date":"2026-04-19T00:00:00","Tournament Purse":20000000,"Deep Cut Fact":"Nicklaus hated it because it exposed bombers"},
-    {"Tournament Name":"Zurich Classic of New Orleans","Course":"TPC Louisiana","City":"Avondale","State":"LA","Country":"USA","Half":1,"Latitude":29.9097,"Longitude":-90.1547,"Tournament Location":null,"Tournament Start Date":"2026-04-23T00:00:00","Tournament End Date":"2026-04-26T00:00:00","Tournament Purse":9500000,"Deep Cut Fact":null},
-    {"Tournament Name":"Cadillac Championship","Course":"Trump National Doral (Blue Monster)","City":"Miami","State":"FL","Country":"USA","Half":1,"Latitude":25.814,"Longitude":-80.3808,"Tournament Location":null,"Tournament Start Date":"2026-04-30T00:00:00","Tournament End Date":"2026-05-03T00:00:00","Tournament Purse":20000000,"Deep Cut Fact":null},
-    {"Tournament Name":"Truist Championship","Course":"Quail Hollow Club","City":"Charlotte","State":"NC","Country":"USA","Half":1,"Latitude":35.2271,"Longitude":-80.8451,"Tournament Location":null,"Tournament Start Date":"2026-05-07T00:00:00","Tournament End Date":"2026-05-10T00:00:00","Tournament Purse":20000000,"Deep Cut Fact":"Green Mile produces more bogeys than Sawgrass 17"},
-    {"Tournament Name":"PGA Championship","Course":"Aronimink Golf Club","City":"Newtown Square","State":"PA","Country":"USA","Half":2,"Latitude":39.9737,"Longitude":-75.3721,"Tournament Location":null,"Tournament Start Date":"2026-05-14T00:00:00","Tournament End Date":"2026-05-17T00:00:00","Tournament Purse":0,"Deep Cut Fact":"Trophy lost multiple times; club pros prioritized internally"},
-    {"Tournament Name":"The CJ Cup Byron Nelson","Course":"TPC Craig Ranch","City":"McKinney","State":"TX","Country":"USA","Half":2,"Latitude":33.1976,"Longitude":-96.6398,"Tournament Location":null,"Tournament Start Date":"2026-05-21T00:00:00","Tournament End Date":"2026-05-24T00:00:00","Tournament Purse":10300000,"Deep Cut Fact":null},
-    {"Tournament Name":"Charles Schwab Challenge","Course":"Colonial Country Club","City":"Fort Worth","State":"TX","Country":"USA","Half":2,"Latitude":32.7382,"Longitude":-97.3397,"Tournament Location":null,"Tournament Start Date":"2026-05-28T00:00:00","Tournament End Date":"2026-05-31T00:00:00","Tournament Purse":9900000,"Deep Cut Fact":"Hogan said it required more thought than any course"},
-    {"Tournament Name":"the Memorial Tournament presented by Workday","Course":"Muifield Village Golf Club","City":"Dublin","State":"OH","Country":"USA","Half":2,"Latitude":40.116,"Longitude":-83.0959,"Tournament Location":null,"Tournament Start Date":"2026-06-04T00:00:00","Tournament End Date":"2026-06-07T00:00:00","Tournament Purse":20000000,"Deep Cut Fact":null},
-    {"Tournament Name":"RBC Canadian Open","Course":"TPC Toronto at Osprey Valley (North Course)","City":"Caledon","State":"ON","Country":"Canada","Half":2,"Latitude":43.8396,"Longitude":-80.0104,"Tournament Location":null,"Tournament Start Date":"2026-06-11T00:00:00","Tournament End Date":"2026-06-14T00:00:00","Tournament Purse":9800000,"Deep Cut Fact":"More first-time national champions than any other Open"},
-    {"Tournament Name":"U.S. Open","Course":"Shinnecock Hills Golf Club","City":"Southamption","State":"NY","Country":"USA","Half":2,"Latitude":40.8882,"Longitude":-72.4767,"Tournament Location":null,"Tournament Start Date":"2026-06-18T00:00:00","Tournament End Date":"2026-06-21T00:00:00","Tournament Purse":0,"Deep Cut Fact":"Setup aims for defensible par; under-par wins seen as failure"},
-    {"Tournament Name":"Travelers Championship","Course":"TPC River Highlands","City":"Cromwell","State":"CT","Country":"USA","Half":2,"Latitude":41.6208,"Longitude":-72.6414,"Tournament Location":null,"Tournament Start Date":"2026-06-25T00:00:00","Tournament End Date":"2026-06-28T00:00:00","Tournament Purse":20000000,"Deep Cut Fact":"Top 3 in player satisfaction; elite via hospitality"},
-    {"Tournament Name":"John Deere Classic","Course":"TPC Deere Run","City":"Silvis","State":"IL","Country":"USA","Half":2,"Latitude":41.5068,"Longitude":-90.3457,"Tournament Location":null,"Tournament Start Date":"2026-07-02T00:00:00","Tournament End Date":"2026-07-05T00:00:00","Tournament Purse":8800000,"Deep Cut Fact":"Launchpad for careers; most first-time winners"},
-    {"Tournament Name":"Genesis Scottish Open","Course":"The Renaissance Club","City":"North Berwick","State":null,"Country":"Scotland","Half":2,"Latitude":56.0353,"Longitude":-2.8364,"Tournament Location":null,"Tournament Start Date":"2026-07-09T00:00:00","Tournament End Date":"2026-07-12T00:00:00","Tournament Purse":9000000,"Deep Cut Fact":"Wind data used in Open forecasting"},
-    {"Tournament Name":"The Open Championship","Course":"Royal Birkdale Golf Club","City":"Southport","State":null,"Country":"England","Half":2,"Latitude":53.646,"Longitude":-3.0038,"Tournament Location":null,"Tournament Start Date":"2026-07-16T00:00:00","Tournament End Date":"2026-07-19T00:00:00","Tournament Purse":0,"Deep Cut Fact":"Originally played on public land with livestock"},
-    {"Tournament Name":"3M Open","Course":"TPC Twin Cities","City":"Blaine","State":"MN","Country":"USA","Half":2,"Latitude":45.1604,"Longitude":-93.2438,"Tournament Location":null,"Tournament Start Date":"2026-07-23T00:00:00","Tournament End Date":"2026-07-26T00:00:00","Tournament Purse":8800000,"Deep Cut Fact":"Bentgrass greens tuned for TV lighting"},
-    {"Tournament Name":"Rocket Classic","Course":"Detroit Golf Club","City":"Detroit","State":"MI","Country":"USA","Half":2,"Latitude":42.4084,"Longitude":-83.0967,"Tournament Location":null,"Tournament Start Date":"2026-07-30T00:00:00","Tournament End Date":"2026-08-02T00:00:00","Tournament Purse":10000000,"Deep Cut Fact":"First full fan-facing analytics integration"},
-    {"Tournament Name":"Wyndham Championship","Course":"Sedgefield Country Club","City":"Greensboro","State":"NC","Country":"USA","Half":2,"Latitude":36.0726,"Longitude":-79.812,"Tournament Location":null,"Tournament Start Date":"2026-08-06T00:00:00","Tournament End Date":"2026-08-09T00:00:00","Tournament Purse":8500000,"Deep Cut Fact":"Determines job security; most volatile event"},
-    {"Tournament Name":"FedEx St. Jude Championship","Course":"TPC Southwind","City":"Memphis","State":"TN","Country":"USA","Half":2,"Latitude":35.0164,"Longitude":-89.8716,"Tournament Location":null,"Tournament Start Date":"2026-08-13T00:00:00","Tournament End Date":"2026-08-16T00:00:00","Tournament Purse":20000000,"Deep Cut Fact":"Biggest status elimination cliff"},
-    {"Tournament Name":"BMW Championship","Course":"Bellerive Country Club","City":"St. Louis","State":"MO","Country":"USA","Half":2,"Latitude":38.6051,"Longitude":-90.414,"Tournament Location":null,"Tournament Start Date":"2026-08-20T00:00:00","Tournament End Date":"2026-08-23T00:00:00","Tournament Purse":20000000,"Deep Cut Fact":"31st place more meaningful than winning"},
-    {"Tournament Name":"TOUR Championship","Course":"East Lake Golf Club","City":"Atlanta","State":"GA","Country":"USA","Half":2,"Latitude":33.7421,"Longitude":-84.3029,"Tournament Location":null,"Tournament Start Date":"2026-08-27T00:00:00","Tournament End Date":"2026-08-30T00:00:00","Tournament Purse":40000000,"Deep Cut Fact":"Feels like investment meeting; second can outpay most wins"}
-  ]
+    {
+        "Tournament Name": "The American Express",
+        "Course": "Pete Dye Stadium Course",
+        "City": "La Quinta",
+        "State": "CA",
+        "Country": "USA",
+        "Half": 1,
+        "Latitude": 33.6631,
+        "Longitude": -116.2931,
+        "Tournament Location": null,
+        "Tournament Start Date": "2026-01-22T00:00:00",
+        "Tournament End Date": "2026-01-25T00:00:00",
+        "Tournament Purse": 9200000,
+        "Deep Cut Facts": []
+    },
+    {
+        "Tournament Name": "Farmers Insurance Open",
+        "Course": "Torrey Pines Golf Couse (South Couse)",
+        "City": "San Diego",
+        "State": "CA",
+        "Country": "USA",
+        "Half": 1,
+        "Latitude": 32.9037,
+        "Longitude": -117.245,
+        "Tournament Location": null,
+        "Tournament Start Date": "2026-01-29T00:00:00",
+        "Tournament End Date": "2026-02-02T00:00:00",
+        "Tournament Purse": 9600000,
+        "Deep Cut Facts": [
+            "Torrey Pines South Course redesigned around Tiger Woods' game; 2008 U.S. Open win on torn ACL"
+        ]
+    },
+    {
+        "Tournament Name": "WM Phoenix Open",
+        "Course": "TPC Scottsdale (Stadium Course)",
+        "City": "Scottsadle",
+        "State": "AZ",
+        "Country": "USA",
+        "Half": 1,
+        "Latitude": 33.5462,
+        "Longitude": -111.891,
+        "Tournament Location": null,
+        "Tournament Start Date": "2026-02-05T00:00:00",
+        "Tournament End Date": "2026-02-08T00:00:00",
+        "Tournament Purse": 9600000,
+        "Deep Cut Facts": [
+            "16th hole engineered for extreme crowd noise; security trained for crowd control first"
+        ]
+    },
+    {
+        "Tournament Name": "Pebble Beach Pro-Am",
+        "Course": "Pebble Beach Golf Links",
+        "City": "Pebble Beach",
+        "State": "CA",
+        "Country": "USA",
+        "Half": 1,
+        "Latitude": 36.5687,
+        "Longitude": -121.9503,
+        "Tournament Location": null,
+        "Tournament Start Date": "2026-02-12T00:00:00",
+        "Tournament End Date": "2026-02-15T00:00:00",
+        "Tournament Purse": 20000000,
+        "Deep Cut Facts": [
+            "Tiger avoided entire career; pros historically hated amateur-controlled pace"
+        ]
+    },
+    {
+        "Tournament Name": "The Genesis Invitational",
+        "Course": "The Riviera Country Club",
+        "City": "Pacific Palisades",
+        "State": "CA",
+        "Country": "USA",
+        "Half": 1,
+        "Latitude": 34.0496,
+        "Longitude": -118.5013,
+        "Tournament Location": null,
+        "Tournament Start Date": "2026-02-19T00:00:00",
+        "Tournament End Date": "2026-02-22T00:00:00",
+        "Tournament Purse": 20000000,
+        "Deep Cut Facts": [
+            "Riviera's kikuyu rough produces 'flyers' that kill spin; players often choose conservative targets to avoid uncontrollable jumpers.",
+            "The par-4 10th's defense is angle + green orientation; a cautious wedge layup can be harder than a bold drive to the correct side.",
+            "The bunker in the 6th green disrupts depth perception and approach planning—players aim for quadrants, not just 'hit the green.'",
+            "Riviera's closing holes lean uphill, which changes club selection patterns versus typical Tour finishing stretches.",
+            "Winners here often rate unusually high in both tee-to-green and short-game—Riviera exposes any single weakness fast."
+        ]
+    },
+    {
+        "Tournament Name": "Cognizant Classic in the Palm Beaches",
+        "Course": "PGA National Resort (The Champion Course)",
+        "City": "Palm Beach Gardens",
+        "State": "FL",
+        "Country": "USA",
+        "Half": 1,
+        "Latitude": 26.8258,
+        "Longitude": -80.143,
+        "Tournament Location": null,
+        "Tournament Start Date": "2026-02-26T00:00:00",
+        "Tournament End Date": "2026-03-01T00:00:00",
+        "Tournament Purse": 9600000,
+        "Deep Cut Facts": [
+            "The 'Bear Trap' (15–17) is a water-and-wind decision chain; strategy changes dramatically by wind direction and pin placements.",
+            "PGA National's green sites reward center-of-green play; attacking flags statistically backfires more than at most Tour stops.",
+            "When the course firms up, missed greens often funnel into tight, awkward chipping areas that punish imprecise contact.",
+            "The finishing stretch can create massive leaderboard swings because par is a great score when wind picks up.",
+            "Historically one of the higher water-ball events on Tour when conditions get breezy."
+        ]
+    },
+    {
+        "Tournament Name": "Arnold Palmer Invitational presented by Mastercard",
+        "Course": "Arnold Palmer's Bay Hill Club & Lodge",
+        "City": "Orlando",
+        "State": "FL",
+        "Country": "USA",
+        "Half": 1,
+        "Latitude": 28.4889,
+        "Longitude": -81.4931,
+        "Tournament Location": null,
+        "Tournament Start Date": "2026-03-05T00:00:00",
+        "Tournament End Date": "2026-03-08T00:00:00",
+        "Tournament Purse": 20000000,
+        "Deep Cut Facts": [
+            "Bay Hill's firm Bermuda/overseeded greens can reject low-spin approaches—trajectory + landing angle matter more than distance.",
+            "The closing stretch (16–18) routinely ranks among the toughest non-major finishes; one miss can turn into double quickly.",
+            "Wind often rotates enough between waves that the course plays like two different setups on the same day.",
+            "Players frequently club down off tees to stay in the fairway because Bay Hill's rough + angles punish driver misses.",
+            "Bay Hill's par-5 decision points depend heavily on lie quality—rough can make 'go for it' essentially non-viable."
+        ]
+    },
+    {
+        "Tournament Name": "THE PLAYERS Championship",
+        "Course": "TPC Sawgrass (THE PLAYERS Stadium Course)",
+        "City": "Ponte Vedra Beach",
+        "State": "FL ",
+        "Country": "USA",
+        "Half": 1,
+        "Latitude": 30.2162,
+        "Longitude": -81.5339,
+        "Tournament Location": null,
+        "Tournament Start Date": "2026-03-12T00:00:00",
+        "Tournament End Date": "2026-03-15T00:00:00",
+        "Tournament Purse": 25000000,
+        "Deep Cut Facts": [
+            "Sawgrass was designed for decision-making under pressure—visual intimidation (bulkheads/lines) is part of the 'hazard.'",
+            "Mounding can alter wind at ground level, so tee-shot wind and approach-shot wind may differ on the same hole.",
+            "The 18th tends to produce more big numbers than 17 because water-left + tension forces defensive lines and tentative swings.",
+            "The closing 16–18 stretch is one of the most volatile on Tour—birdie/eagle is possible, but doubles appear fast.",
+            "Sawgrass rewards precision with mid-irons more than raw distance—proximity from 150–200 is often the separator."
+        ]
+    },
+    {
+        "Tournament Name": "Valspar Championship",
+        "Course": "Innisbrook Resort (Copperhead Course)",
+        "City": "Palm Harbor",
+        "State": "FL",
+        "Country": "USA",
+        "Half": 1,
+        "Latitude": 28.1006,
+        "Longitude": -82.7625,
+        "Tournament Location": null,
+        "Tournament Start Date": "2026-03-19T00:00:00",
+        "Tournament End Date": "2026-03-22T00:00:00",
+        "Tournament Purse": 9100000,
+        "Deep Cut Facts": [
+            "Copperhead's 'Snake Pit' (16–18) plays through corridors that amplify swirling wind—club selection is rarely straightforward.",
+            "Innisbrook has meaningful elevation change for Florida, which changes trajectories and sightlines compared to most state venues.",
+            "The course 'looks' tighter than it measures; intimidation off the tee is part of the scoring defense.",
+            "Approach play is disproportionately important here; winners typically dominate SG: Approach for the week.",
+            "Green complexes force specific miss locations—wrong-side misses create brutally defensive chips."
+        ]
+    },
+    {
+        "Tournament Name": "Texas Children's Houston Open",
+        "Course": "Memorial Park Golf Course",
+        "City": "Houston",
+        "State": "TX",
+        "Country": "USA",
+        "Half": 1,
+        "Latitude": 29.7604,
+        "Longitude": -95.4037,
+        "Tournament Location": null,
+        "Tournament Start Date": "2026-03-26T00:00:00",
+        "Tournament End Date": "2026-03-29T00:00:00",
+        "Tournament Purse": 9900000,
+        "Deep Cut Facts": [
+            "Memorial Park's redesign emphasizes firm runoffs and short grass over heavy rough—more link-style defense than parkland.",
+            "Several greens are open-fronted, inviting ground approaches when conditions are firm.",
+            "The course's difficulty swings year to year with green firmness; it can play 'soft scoring' or 'hard hold' depending on setup.",
+            "Bunker placement is intentionally selective rather than constant—angles and contours do more of the work.",
+            "Wind can be a primary defense; when it's up, scoring separation increases quickly."
+        ]
+    },
+    {
+        "Tournament Name": "Valero Texas Open",
+        "Course": "TPC San Antonio (Oaks Course)",
+        "City": "San Antonio",
+        "State": "TX",
+        "Country": "USA",
+        "Half": 1,
+        "Latitude": 29.4056,
+        "Longitude": -98.6549,
+        "Tournament Location": null,
+        "Tournament Start Date": "2026-04-02T00:00:00",
+        "Tournament End Date": "2026-04-05T00:00:00",
+        "Tournament Purse": 9800000,
+        "Deep Cut Facts": [
+            "TPC San Antonio (Oaks) sits on rugged limestone/quarry terrain—natural shelves and rock features influenced routing choices.",
+            "It's routinely one of the windiest Tour stops, which turns certain tee shots into shape-and-window challenges.",
+            "As the final Masters tune-up, pressure is uniquely high for bubble players chasing a last berth.",
+            "Greens feature subtle false fronts and runoff areas that punish slightly under-struck wedges.",
+            "Players often choose positional clubs off tees to avoid crosswind-exposed landing zones."
+        ]
+    },
+    {
+        "Tournament Name": "Masters Tournament",
+        "Course": "Augusta National Golf Club",
+        "City": "Augusta",
+        "State": "GA",
+        "Country": "USA",
+        "Half": 1,
+        "Latitude": 33.5021,
+        "Longitude": -82.02,
+        "Tournament Location": null,
+        "Tournament Start Date": "2026-04-09T00:00:00",
+        "Tournament End Date": "2026-04-12T00:00:00",
+        "Tournament Purse": 0,
+        "Deep Cut Facts": [
+            "Augusta's fairways play like landing 'plates'—being on the correct tier matters as much as being in the fairway.",
+            "SubAir and moisture management allow the club to dial firmness quickly—greens can change character within hours.",
+            "Sunday hole locations often use slopes intentionally as funnels, creating dramatic 'use the contour' outcomes.",
+            "Amen Corner's real challenge is angles into firm greens, not raw yardage—miss zones matter more than distance.",
+            "Putting is unusually correlated to winning because the slopes create make-or-miss tension on almost every key putt."
+        ]
+    },
+    {
+        "Tournament Name": "RBC Heritage",
+        "Course": "Harbour Town Golf Links",
+        "City": "Hilton Head ",
+        "State": "SC",
+        "Country": "USA",
+        "Half": 1,
+        "Latitude": 32.2122,
+        "Longitude": -80.7526,
+        "Tournament Location": null,
+        "Tournament Start Date": "2026-04-16T00:00:00",
+        "Tournament End Date": "2026-04-19T00:00:00",
+        "Tournament Purse": 20000000,
+        "Deep Cut Facts": [
+            "Harbour Town's defense is angles + tiny targets; it neutralizes bombers by forcing positional shots and precise irons.",
+            "Several holes remove driver entirely because doglegs and overhanging trees define the correct landing area.",
+            "The greens are small and subtly contoured, so GIR is harder than the yardage implies.",
+            "Coastal wind can flip shot shapes hole-to-hole; players often switch from hold-offs to release draws within a round.",
+            "Historically rewards elite iron control and disciplined course management more than power."
+        ]
+    },
+    {
+        "Tournament Name": "Zurich Classic of New Orleans",
+        "Course": "TPC Louisiana",
+        "City": "Avondale",
+        "State": "LA",
+        "Country": "USA",
+        "Half": 1,
+        "Latitude": 29.9097,
+        "Longitude": -90.1547,
+        "Tournament Location": null,
+        "Tournament Start Date": "2026-04-23T00:00:00",
+        "Tournament End Date": "2026-04-26T00:00:00",
+        "Tournament Purse": 9500000,
+        "Deep Cut Facts": [
+            "Only team event on the PGA Tour—best ball and alternate shot produce radically different scoring patterns.",
+            "Alternate shot rounds create high volatility because one bad swing affects both players' score immediately.",
+            "Strategy is format-dependent: teams attack more in best ball and play far more conservatively in alternate shot.",
+            "Pair chemistry matters: pace, decision-making, and 'who hits which shots' become real competitive edges.",
+            "Leaderboards swing faster than standard events because team formats compress scoring in best ball and spike it in alt-shot."
+        ]
+    },
+    {
+        "Tournament Name": "Cadillac Championship",
+        "Course": "Trump National Doral (Blue Monster)",
+        "City": "Miami",
+        "State": "FL",
+        "Country": "USA",
+        "Half": 1,
+        "Latitude": 25.814,
+        "Longitude": -80.3808,
+        "Tournament Location": null,
+        "Tournament Start Date": "2026-04-30T00:00:00",
+        "Tournament End Date": "2026-05-03T00:00:00",
+        "Tournament Purse": 20000000,
+        "Deep Cut Facts": []
+    },
+    {
+        "Tournament Name": "Truist Championship",
+        "Course": "Quail Hollow Club",
+        "City": "Charlotte",
+        "State": "NC",
+        "Country": "USA",
+        "Half": 1,
+        "Latitude": 35.2271,
+        "Longitude": -80.8451,
+        "Tournament Location": null,
+        "Tournament Start Date": "2026-05-07T00:00:00",
+        "Tournament End Date": "2026-05-10T00:00:00",
+        "Tournament Purse": 20000000,
+        "Deep Cut Facts": [
+            "Quail Hollow's 'Green Mile' (16–18) is one of the toughest finishing stretches on Tour—par is often gaining strokes.",
+            "The course's modern identity is built around long-iron approaches into firm Bermuda greens under pressure.",
+            "Tee shots must be shaped to hold fairways; straight ball flights can be disadvantaged on key holes.",
+            "The 18th historically plays as a true closer—water + angle forces commitment with driver and approach.",
+            "Winners commonly rank elite in SG: Off-the-Tee because the long holes reward controlled power."
+        ]
+    },
+    {
+        "Tournament Name": "PGA Championship",
+        "Course": "Aronimink Golf Club",
+        "City": "Newtown Square",
+        "State": "PA",
+        "Country": "USA",
+        "Half": 2,
+        "Latitude": 39.9737,
+        "Longitude": -75.3721,
+        "Tournament Location": null,
+        "Tournament Start Date": "2026-05-14T00:00:00",
+        "Tournament End Date": "2026-05-17T00:00:00",
+        "Tournament Purse": 0,
+        "Deep Cut Facts": [
+            "Compared to a U.S. Open, PGA setups often allow slightly wider driving corridors but demand precise approach control.",
+            "Course selection frequently skews toward venues that reward power—long irons and hybrids show up more often.",
+            "Historically the PGA has produced a notable number of first-time major winners relative to other majors.",
+            "Green complexes often feature internal tiers; leaving approaches on the wrong shelf is effectively a three-putt risk.",
+            "Contending requires balancing aggression with avoidance of big numbers—risk/reward feels closer to a 'major scoring test' than 'par protection.'"
+        ]
+    },
+    {
+        "Tournament Name": "The CJ Cup Byron Nelson",
+        "Course": "TPC Craig Ranch",
+        "City": "McKinney",
+        "State": "TX",
+        "Country": "USA",
+        "Half": 2,
+        "Latitude": 33.1976,
+        "Longitude": -96.6398,
+        "Tournament Location": null,
+        "Tournament Start Date": "2026-05-21T00:00:00",
+        "Tournament End Date": "2026-05-24T00:00:00",
+        "Tournament Purse": 10300000,
+        "Deep Cut Facts": []
+    },
+    {
+        "Tournament Name": "Charles Schwab Challenge",
+        "Course": "Colonial Country Club",
+        "City": "Fort Worth",
+        "State": "TX",
+        "Country": "USA",
+        "Half": 2,
+        "Latitude": 32.7382,
+        "Longitude": -97.3397,
+        "Tournament Location": null,
+        "Tournament Start Date": "2026-05-28T00:00:00",
+        "Tournament End Date": "2026-05-31T00:00:00",
+        "Tournament Purse": 9900000,
+        "Deep Cut Facts": [
+            "Colonial's 'Horrible Horseshoe' (3–5) is a classic scoring hinge—survive it and you can attack later.",
+            "The course forces positional tee shots; driver is often optional because angles matter more than length.",
+            "Small targets and overhanging trees reward shot-shaping and trajectory control over raw carry distance.",
+            "Winners tend to rank highly in proximity from wedge-to-mid-iron ranges—precision is the currency here.",
+            "It's one of the best examples of a course that makes pros 'play golf,' not just hit shots."
+        ]
+    },
+    {
+        "Tournament Name": "the Memorial Tournament presented by Workday",
+        "Course": "Muifield Village Golf Club",
+        "City": "Dublin",
+        "State": "OH",
+        "Country": "USA",
+        "Half": 2,
+        "Latitude": 40.116,
+        "Longitude": -83.0959,
+        "Tournament Location": null,
+        "Tournament Start Date": "2026-06-04T00:00:00",
+        "Tournament End Date": "2026-06-07T00:00:00",
+        "Tournament Purse": 20000000,
+        "Deep Cut Facts": [
+            "Muirfield Village plays like a mini-major: thick rough years + firm greens turn approach control into survival.",
+            "Recent green changes added internal contour—wrong-side placement is punished more than in earlier eras.",
+            "Jack Nicklaus is hands-on with setup philosophy; the test can evolve year to year.",
+            "The finishing holes reward disciplined targets—hero lines often cost more than they pay.",
+            "Winners typically dominate tee-to-green; scrambling alone rarely carries you here."
+        ]
+    },
+    {
+        "Tournament Name": "RBC Canadian Open",
+        "Course": "TPC Toronto at Osprey Valley (North Course)",
+        "City": "Caledon",
+        "State": "ON",
+        "Country": "Canada",
+        "Half": 2,
+        "Latitude": 43.8396,
+        "Longitude": -80.0104,
+        "Tournament Location": null,
+        "Tournament Start Date": "2026-06-11T00:00:00",
+        "Tournament End Date": "2026-06-14T00:00:00",
+        "Tournament Purse": 9800000,
+        "Deep Cut Facts": [
+            "Canadian Open venue variety creates unusual winner profiles compared to more 'fixed course' events.",
+            "Weather and soft conditions can turn it into a birdie-fest, but firm weeks reward strategic positioning.",
+            "Historically produces a strong mix of first-time winners and breakthrough performances.",
+            "Crowd energy is unique—national event feel changes pressure, especially for Canadians in contention.",
+            "Course setup often balances accessibility with volatility: reachable holes + hazards that still produce doubles."
+        ]
+    },
+    {
+        "Tournament Name": "U.S. Open",
+        "Course": "Shinnecock Hills Golf Club",
+        "City": "Southamption",
+        "State": "NY",
+        "Country": "USA",
+        "Half": 2,
+        "Latitude": 40.8882,
+        "Longitude": -72.4767,
+        "Tournament Location": null,
+        "Tournament Start Date": "2026-06-18T00:00:00",
+        "Tournament End Date": "2026-06-21T00:00:00",
+        "Tournament Purse": 0,
+        "Deep Cut Facts": [
+            "USGA setups often target 'defensible par'—the test is controlling misses, not just making birdies.",
+            "Fairway widths can be narrowed dramatically, shifting advantage toward elite drivers and precision.",
+            "Green speeds and firmness make distance control paramount; being pin-high is often more important than 'near.'",
+            "Venue rotation (links, parkland, classic) forces different skill mixes year to year—no single style always wins.",
+            "The championship rewards avoidance of doubles more than any other major—one bad swing can end contention."
+        ]
+    },
+    {
+        "Tournament Name": "Travelers Championship",
+        "Course": "TPC River Highlands",
+        "City": "Cromwell",
+        "State": "CT",
+        "Country": "USA",
+        "Half": 2,
+        "Latitude": 41.6208,
+        "Longitude": -72.6414,
+        "Tournament Location": null,
+        "Tournament Start Date": "2026-06-25T00:00:00",
+        "Tournament End Date": "2026-06-28T00:00:00",
+        "Tournament Purse": 20000000,
+        "Deep Cut Facts": [
+            "TPC River Highlands rewards wedge proximity and aggressive scoring—short par-4s create constant decision points.",
+            "The closing stretch can produce eagle-birdie bursts, making late leaderboard swings common.",
+            "Because it's scoreable, the separator is usually approach precision rather than survival golf.",
+            "Players often treat it like an 'attack' week: more flags, more makeable putts, more volatility.",
+            "Momentum matters: a two-hole run can move you 10+ spots on the weekend."
+        ]
+    },
+    {
+        "Tournament Name": "John Deere Classic",
+        "Course": "TPC Deere Run",
+        "City": "Silvis",
+        "State": "IL",
+        "Country": "USA",
+        "Half": 2,
+        "Latitude": 41.5068,
+        "Longitude": -90.3457,
+        "Tournament Location": null,
+        "Tournament Start Date": "2026-07-02T00:00:00",
+        "Tournament End Date": "2026-07-05T00:00:00",
+        "Tournament Purse": 8800000,
+        "Deep Cut Facts": [
+            "One of the strongest events historically for first-time winners and breakout performances.",
+            "Winning scores tend to be deep because par-5s and several par-4s are consistently reachable/attackable.",
+            "Low scoring compresses the field; one bogey can lose multiple strokes to the field instantly.",
+            "It's a classic 'wedge + putter' event—short iron proximity and hot putting dominate outcomes.",
+            "Sunday volatility is high because the course keeps giving birdie chances late."
+        ]
+    },
+    {
+        "Tournament Name": "Genesis Scottish Open",
+        "Course": "The Renaissance Club",
+        "City": "North Berwick",
+        "State": null,
+        "Country": "Scotland",
+        "Half": 2,
+        "Latitude": 56.0353,
+        "Longitude": -2.8364,
+        "Tournament Location": null,
+        "Tournament Start Date": "2026-07-09T00:00:00",
+        "Tournament End Date": "2026-07-12T00:00:00",
+        "Tournament Purse": 9000000,
+        "Deep Cut Facts": [
+            "The Renaissance Club blends modern links strategy with firm turf—ground game becomes a real competitive tool.",
+            "Wind direction changes can flip the entire course's scoring profile from one day to the next.",
+            "It functions as Open Championship prep: trajectory control, flight windows, and bounce reads matter.",
+            "Runoff areas and firm fairways punish aerial-only game plans—shot creativity is rewarded.",
+            "Proximity numbers can look 'worse' than normal because players intentionally play to safe zones to avoid runoffs."
+        ]
+    },
+    {
+        "Tournament Name": "The Open Championship",
+        "Course": "Royal Birkdale Golf Club",
+        "City": "Southport",
+        "State": null,
+        "Country": "England",
+        "Half": 2,
+        "Latitude": 53.646,
+        "Longitude": -3.0038,
+        "Tournament Location": null,
+        "Tournament Start Date": "2026-07-16T00:00:00",
+        "Tournament End Date": "2026-07-19T00:00:00",
+        "Tournament Purse": 0,
+        "Deep Cut Facts": [
+            "Links golf is defined by firm fescue + wind; ground approaches can run 20–40 yards by design.",
+            "Revetted pot bunkers often force sideways exits—entering one is frequently a one-shot penalty in practice.",
+            "Tee-time waves can create major scoring advantages when weather hits—strategy includes 'survive your window.'",
+            "The best players manage misses: short-side misses on links can be devastating because runoffs feed into awkward lies.",
+            "Course identity changes daily with wind; 'same holes' play like different holes depending on direction and strength."
+        ]
+    },
+    {
+        "Tournament Name": "3M Open",
+        "Course": "TPC Twin Cities",
+        "City": "Blaine",
+        "State": "MN",
+        "Country": "USA",
+        "Half": 2,
+        "Latitude": 45.1604,
+        "Longitude": -93.2438,
+        "Tournament Location": null,
+        "Tournament Start Date": "2026-07-23T00:00:00",
+        "Tournament End Date": "2026-07-26T00:00:00",
+        "Tournament Purse": 8800000,
+        "Deep Cut Facts": [
+            "TPC Twin Cities tends to reward aggressive iron play; birdie chances are plentiful but hazards still create big numbers.",
+            "Scoring volatility is high because reachable holes invite aggression and punish slight mis-hits.",
+            "Winners frequently post very low totals—putting and approach proximity are usually decisive.",
+            "When greens firm, the penalty for missed greens increases quickly due to runoff and tricky chipping lies.",
+            "Late-week pressure often shows up on water-guarded holes where players must choose attack vs protect."
+        ]
+    },
+    {
+        "Tournament Name": "Rocket Classic",
+        "Course": "Detroit Golf Club",
+        "City": "Detroit",
+        "State": "MI",
+        "Country": "USA",
+        "Half": 2,
+        "Latitude": 42.4084,
+        "Longitude": -83.0967,
+        "Tournament Location": null,
+        "Tournament Start Date": "2026-07-30T00:00:00",
+        "Tournament End Date": "2026-08-02T00:00:00",
+        "Tournament Purse": 10000000,
+        "Deep Cut Facts": [
+            "Detroit Golf Club often plays as a true birdie-fest, so the skill is maintaining aggression without a single sloppy bogey run.",
+            "Low scoring compresses the field—hot putting alone can carry someone into contention fast.",
+            "Approach proximity (especially wedges) tends to separate leaders because so many players hit fairways.",
+            "Sunday swings are common because reachable holes create eagle looks that flip the board.",
+            "The event is known for streak scoring—players can go on five-birdie runs without leaving 'good' holes."
+        ]
+    },
+    {
+        "Tournament Name": "Wyndham Championship",
+        "Course": "Sedgefield Country Club",
+        "City": "Greensboro",
+        "State": "NC",
+        "Country": "USA",
+        "Half": 2,
+        "Latitude": 36.0726,
+        "Longitude": -79.812,
+        "Tournament Location": null,
+        "Tournament Start Date": "2026-08-06T00:00:00",
+        "Tournament End Date": "2026-08-09T00:00:00",
+        "Tournament Purse": 8500000,
+        "Deep Cut Facts": [
+            "Last regular-season stop means pressure is different: FedEx bubble tension often exceeds 'winning' tension.",
+            "Donald Ross design emphasizes angles into greens; being in the correct side of fairway still matters at modern distances.",
+            "Because scoring is available, the separator is usually iron control + putting rather than survival.",
+            "Leaderboards are volatile because players must chase points—aggression spikes on the weekend.",
+            "It's one of the most emotionally intense weeks for mid-tier players fighting for job security."
+        ]
+    },
+    {
+        "Tournament Name": "FedEx St. Jude Championship",
+        "Course": "TPC Southwind",
+        "City": "Memphis",
+        "State": "TN",
+        "Country": "USA",
+        "Half": 2,
+        "Latitude": 35.0164,
+        "Longitude": -89.8716,
+        "Tournament Location": null,
+        "Tournament Start Date": "2026-08-13T00:00:00",
+        "Tournament End Date": "2026-08-16T00:00:00",
+        "Tournament Purse": 20000000,
+        "Deep Cut Facts": [
+            "Playoffs create an immediate elimination cliff—strategy includes protecting position, not just chasing birdies.",
+            "TPC Southwind is water-and-position golf: mid-iron precision is rewarded, misses get punished fast.",
+            "The course tends to produce both birdie runs and sudden doubles—volatility increases under playoff pressure.",
+            "Players manage risk differently depending on FedEx position: leaders can play conservative; bubble guys must attack.",
+            "Sunday often becomes a 'two leaderboard' situation: tournament win vs points survival."
+        ]
+    },
+    {
+        "Tournament Name": "BMW Championship",
+        "Course": "Bellerive Country Club",
+        "City": "St. Louis",
+        "State": "MO",
+        "Country": "USA",
+        "Half": 2,
+        "Latitude": 38.6051,
+        "Longitude": -90.414,
+        "Tournament Location": null,
+        "Tournament Start Date": "2026-08-20T00:00:00",
+        "Tournament End Date": "2026-08-23T00:00:00",
+        "Tournament Purse": 20000000,
+        "Deep Cut Facts": [
+            "No cut + small field means everyone is close enough to make a run—momentum swings feel amplified.",
+            "The real drama is the FedEx top-30 line; 28th–32nd can be more intense than the win.",
+            "Players on the bubble change strategy mid-round as live points shift—real-time decision-making matters.",
+            "Aggression spikes because there's no cut penalty—players can absorb a double and still chase.",
+            "The week often rewards players who can string birdies quickly rather than grind pars."
+        ]
+    },
+    {
+        "Tournament Name": "TOUR Championship",
+        "Course": "East Lake Golf Club",
+        "City": "Atlanta",
+        "State": "GA",
+        "Country": "USA",
+        "Half": 2,
+        "Latitude": 33.7421,
+        "Longitude": -84.3029,
+        "Tournament Location": null,
+        "Tournament Start Date": "2026-08-27T00:00:00",
+        "Tournament End Date": "2026-08-30T00:00:00",
+        "Tournament Purse": 40000000,
+        "Deep Cut Facts": [
+            "Staggered start changes risk tolerance from hole one—leaders manage, chasers must create volatility.",
+            "East Lake's Bermuda grain is a hidden factor: putts and chips behave differently depending on grain and moisture.",
+            "The 18th is a true pressure finisher: forced carry + demanding approach under a season's worth of stakes.",
+            "Strategy is 'two-layered': score to win the week and also defend/attack starting-strokes position.",
+            "Payout structure makes finishing positions materially meaningful—strategy can shift based on risk vs placement."
+        ]
+    }
+]
 };
 
 
@@ -862,14 +1476,35 @@
       return wc[code] || '🌤️ Fair';
     };
 
+    // Collect Deep Cut Facts for the CURRENT tournament only
+    const allFacts = useMemo(() => {
+      if (!currentTournament) return [];
+      const facts = currentTournament['Deep Cut Facts'] || [];
+      return facts.map(f => ({ tournament: currentTournament['Tournament Name'], fact: f }));
+    }, [currentTournament]);
+    
+    const [factIndex, setFactIndex] = useState(0);
+    const [factFading, setFactFading] = useState(false);
+    
+    useEffect(() => {
+      if (allFacts.length <= 1) return;
+      const interval = setInterval(() => {
+        setFactFading(true);
+        setTimeout(() => {
+          setFactIndex(prev => (prev + 1) % allFacts.length);
+          setFactFading(false);
+        }, 400);
+      }, 6000);
+      return () => clearInterval(interval);
+    }, [allFacts.length]);
+
     const sortedPicks = [...currentWeekPicks].sort((a, b) => pickOrder.indexOf(a.Player) - pickOrder.indexOf(b.Player));
 
     const tournamentInfo = useMemo(() => {
       return {
         course: currentTournament?.['Course'] || 'TBD',
         city: currentTournament?.['City'] ? `${currentTournament['City']}, ${currentTournament['State']}` : 'Location TBD',
-        defending: 'TBD',
-        trivia: currentTournament?.['Deep Cut Fact'] || null
+        defending: 'TBD'
       };
     }, [currentTournament]);
 
@@ -906,9 +1541,14 @@
           React.createElement("p", { className: "text-sm font-bold text-blue-900" }, "132 Players")
         )
       ),
-      tournamentInfo.trivia && React.createElement("div", { className: "bg-purple-50 border-l-4 border-purple-400 p-3 mb-4 rounded" },
-        React.createElement("p", { className: "text-xs font-semibold text-purple-900 mb-1" }, "💡 Did You Know?"),
-        React.createElement("p", { className: "text-sm text-purple-800" }, tournamentInfo.trivia)
+      allFacts.length > 0 && React.createElement("div", { className: "bg-purple-50 border-l-4 border-purple-400 p-3 mb-4 rounded" },
+        React.createElement("div", { className: "flex items-center justify-between mb-1" },
+          React.createElement("p", { className: "text-xs font-semibold text-purple-900" }, "💡 Did You Know?"),
+          allFacts.length > 1 && React.createElement("p", { className: "text-[10px] text-purple-500" }, `${factIndex + 1} / ${allFacts.length}`)
+        ),
+        React.createElement("div", { className: clsx("fact-fade", factFading ? "fact-hidden" : "fact-visible") },
+          React.createElement("p", { className: "text-sm text-purple-800" }, allFacts[factIndex]?.fact)
+        )
       ),
       leaderName && React.createElement("div", { className: "bg-yellow-50 border-l-4 border-yellow-400 p-3 mb-4 rounded" },
         React.createElement("p", { className: "text-sm" },
