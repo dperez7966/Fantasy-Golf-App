@@ -383,76 +383,89 @@
       const html = await response.text();
       const parser = new DOMParser();
       const doc = parser.parseFromString(html, 'text/html');
-      const titleElement = doc.querySelector('.Leaderboard__Event__Title, h1');
-      const tournamentName = titleElement ? titleElement.textContent.trim() : 'Unknown Tournament';
-      const statusElement = doc.querySelector('.Leaderboard__Event__Date, .Leaderboard__Round__Info');
-      const status = statusElement ? statusElement.textContent.trim() : 'In Progress';
-      const firstRow = doc.querySelector('tbody tr.Table__TR');
-      let tournamentState = 'round1';
-      let colPos, colName, colTot, colThru, colEarnings;
-      if (firstRow) {
-        const cells = firstRow.querySelectorAll('td');
-        const cellCount = cells.length;
-        colName = -1;
-        for (let i = 0; i < cells.length; i++) {
-          const link = cells[i].querySelector('a');
-          if (link && link.textContent.trim().length > 3) { colName = i; break; }
-        }
-        if (cellCount >= 10) {
-          tournamentState = 'final';
-          colPos = colName - 1; colTot = colName + 1; colThru = colName + 6; colEarnings = colName + 7;
-        } else if (cellCount >= 8) {
-          tournamentState = 'midround';
-          colPos = colName - 2; colTot = colName + 1; colThru = colName + 3; colEarnings = -1;
-        } else {
-          tournamentState = 'round1';
-          colPos = colName - 1; colTot = colName + 1; colThru = colName + 2; colEarnings = -1;
+      
+      // Tournament name
+      let tournamentName = 'Unknown Tournament';
+      const h1 = doc.querySelector('h1');
+      if (h1) {
+        tournamentName = h1.textContent.trim();
+      } else {
+        const pageTitle = doc.querySelector('title');
+        if (pageTitle) {
+          const match = pageTitle.textContent.match(/^\d{4}\s+(.+?)\s+Leaderboard/i);
+          if (match) tournamentName = match[1];
         }
       }
+      
+      // Status
+      let status = 'In Progress';
+      const allText = doc.body?.textContent || '';
+      const roundMatch = allText.match(/Round \d+\s*-\s*[A-Za-z ]+/);
+      if (roundMatch) status = roundMatch[0].trim();
+      
+      // Grab ALL headers from the table
+      const headerCells = doc.querySelectorAll('thead th, thead td');
+      const headers = [];
+      headerCells.forEach(cell => {
+        headers.push(cell.textContent.trim().toUpperCase());
+      });
+      
+      console.log('ESPN Headers:', headers);
+      
+      // Grab ALL data from every row - map each cell to its header
       const leaderboard = [];
-      const rows = doc.querySelectorAll('tbody tr.Table__TR');
+      const rows = doc.querySelectorAll('tbody tr');
+      
       rows.forEach(row => {
         try {
           if (row.querySelector('th')) return;
           const cells = row.querySelectorAll('td');
           if (cells.length < 4) return;
-          const nameCell = cells[colName];
-          if (!nameCell) return;
-          const link = nameCell.querySelector('a');
-          let name = link ? link.textContent.trim() : nameCell.textContent.trim();
-          name = name.replace(/\s+/g, ' ').trim();
+          
+          // Build raw object with ALL columns
+          const raw = {};
+          cells.forEach((cell, idx) => {
+            if (idx < headers.length && headers[idx]) {
+              raw[headers[idx]] = cell.textContent.trim();
+            }
+          });
+          
+          // Find player name via <a> link
+          let name = '';
+          for (let i = 0; i < cells.length; i++) {
+            const link = cells[i].querySelector('a');
+            if (link && link.textContent.trim().length > 3) {
+              name = link.textContent.trim().replace(/\s+/g, ' ');
+              break;
+            }
+          }
           if (!name || name.length < 3) return;
-          const position = cells[colPos]?.textContent.trim() || '—';
-          let score = '—';
-          const scoreCell = cells[colTot];
-          if (scoreCell) {
-            const scoreText = scoreCell.textContent.trim();
-            if (scoreText.match(/^[+\-]\d+$/) || scoreText === 'E' || scoreText === '--' || scoreText === 'Par') {
-              score = scoreText === '--' ? 'E' : scoreText === 'Par' ? 'E' : scoreText;
-            }
+          
+          // Parse earnings if present
+          let earningsNum = 0;
+          const earningsStr = raw['EARNINGS'] || '';
+          if (earningsStr.match(/^\$[\d,]+$/)) {
+            earningsNum = parseFloat(earningsStr.replace(/[$,]/g, ''));
           }
-          let thru = '—';
-          const thruCell = cells[colThru];
-          if (thruCell) {
-            const thruText = thruCell.textContent.trim();
-            if (tournamentState === 'final') { thru = 'F'; }
-            else if (thruText === 'F' || thruText.match(/^\d{1,2}\*?$/) || thruText === '*') { thru = thruText; }
-          }
-          let earnings = 0;
-          if (colEarnings >= 0 && cells[colEarnings]) {
-            const earningsText = cells[colEarnings].textContent.trim();
-            if (earningsText.match(/^\$[\d,]+$/)) { earnings = parseFloat(earningsText.replace(/[$,]/g, '')); }
-          } else {
-            for (let i = 0; i < cells.length; i++) {
-              const cellText = cells[i].textContent.trim();
-              if (cellText.match(/^\$[\d,]+$/)) { earnings = parseFloat(cellText.replace(/[$,]/g, '')); break; }
-            }
-          }
-          leaderboard.push({ name, position, score, thru, earnings });
+          
+          leaderboard.push({
+            name,
+            raw,
+            position: raw['POS'] || '\u2014',
+            score: raw['SCORE'] || '\u2014',
+            today: raw['TODAY'] || '\u2014',
+            thru: raw['THRU'] || (earningsStr ? 'F' : '\u2014'),
+            tot: raw['TOT'] || '\u2014',
+            earnings: earningsNum
+          });
         } catch (e) { console.warn('Error parsing row:', e); }
       });
+      
+      console.log('ESPN parsed:', leaderboard.length, 'golfers');
+      if (leaderboard[0]) console.log('Sample:', JSON.stringify(leaderboard[0].raw));
+      
       return {
-        tournamentName, status,
+        tournamentName, status, headers,
         leaderboard: leaderboard.filter(g => g.name && g.name.length > 2),
         lastUpdated: new Date(),
         rawDataAvailable: leaderboard.length > 0
@@ -627,8 +640,13 @@
         const golferData = liveData.leaderboard.find(g => matchGolferName(pick.Pick, g.name));
         return {
           player: pick.Player, golfer: pick.Pick,
-          position: golferData?.position || '—', score: golferData?.score || '—',
-          thru: golferData?.thru || '—', earnings: golferData?.earnings || 0,
+          position: golferData?.position || '—',
+          score: golferData?.score || '—',
+          today: golferData?.today || '—',
+          thru: golferData?.thru || '—',
+          tot: golferData?.tot || '—',
+          earnings: golferData?.earnings || 0,
+          raw: golferData?.raw || {},
           found: !!golferData
         };
       }).sort((a, b) => {
@@ -720,10 +738,15 @@
                 React.createElement("div", { className: "text-xs text-gray-500" }, "Position")
               )
             ),
-            pick.found && React.createElement("div", { className: "grid grid-cols-3 gap-4 text-center pt-3 border-t" },
-              React.createElement("div", null, React.createElement("div", { className: "text-xs text-gray-500" }, "Score"), React.createElement("div", { className: "font-semibold" }, pick.score)),
+            pick.found && React.createElement("div", { className: "grid grid-cols-4 gap-3 text-center pt-3 border-t" },
+              React.createElement("div", null, React.createElement("div", { className: "text-xs text-gray-500" }, "Score"), React.createElement("div", { className: "font-semibold text-lg" }, pick.score)),
+              pick.today !== '—' 
+                ? React.createElement("div", null, React.createElement("div", { className: "text-xs text-gray-500" }, "Today"), React.createElement("div", { className: "font-semibold" }, pick.today))
+                : React.createElement("div", null, React.createElement("div", { className: "text-xs text-gray-500" }, "Tot"), React.createElement("div", { className: "font-semibold" }, pick.tot)),
               React.createElement("div", null, React.createElement("div", { className: "text-xs text-gray-500" }, "Thru"), React.createElement("div", { className: "font-semibold" }, pick.thru)),
-              React.createElement("div", null, React.createElement("div", { className: "text-xs text-gray-500" }, "Earnings"), React.createElement("div", { className: "font-semibold text-green-600" }, pick.earnings > 0 ? currency(pick.earnings) : "—"))
+              pick.earnings > 0 
+                ? React.createElement("div", null, React.createElement("div", { className: "text-xs text-gray-500" }, "Earnings"), React.createElement("div", { className: "font-semibold text-green-600" }, currency(pick.earnings)))
+                : React.createElement("div", null, React.createElement("div", { className: "text-xs text-gray-500" }, "Tot"), React.createElement("div", { className: "font-semibold" }, pick.tot))
             )
           )
         )
@@ -734,11 +757,13 @@
         React.createElement("p", { className: "font-semibold text-blue-900 mb-1" }, "💡 How it works:"),
         React.createElement("p", { className: "text-blue-800 mb-2" }, "Scores are scraped from ESPN.com using a CORS proxy. Auto-refreshes every 3 minutes when this tab is active."),
         React.createElement("p", { className: "text-blue-800 mb-2" }, `Found ${liveData.leaderboard.length} golfers. Matched ${matchedPicks.filter(p => p.found).length} of ${currentWeekPicks.length} picks.`),
+        liveData.headers && React.createElement("p", { className: "text-blue-800 mb-2" }, `Columns: ${liveData.headers.filter(h => h).join(', ')}`),
         React.createElement("details", { className: "mt-2" },
           React.createElement("summary", { className: "cursor-pointer font-semibold text-blue-900 hover:text-blue-700" }, "🔍 Debug: View Raw Data"),
           React.createElement("div", { className: "mt-2 max-h-48 overflow-y-auto bg-white p-2 rounded text-[10px] font-mono" },
-            liveData.leaderboard.slice(0, 10).map((g, i) => React.createElement("div", { key: i, className: "mb-1" }, `${g.position} | ${g.name} | Score: ${g.score} | Thru: ${g.thru}`))
-          )
+            liveData.leaderboard.slice(0, 10).map((g, i) => React.createElement("div", { key: i, className: "mb-1" }, 
+              Object.entries(g.raw).map(([k, v]) => `${k}:${v}`).join(' | ')
+            ))          )
         )
       )
     );
