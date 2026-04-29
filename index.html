@@ -988,28 +988,92 @@
     return Array.from(arguments).filter(Boolean).join(" ");
   }
 
+    // Fetch leaderboard from ESPN's JSON API (avoids the "JavaScript is disabled" HTML scraping problem)
   async function scrapeESPNLeaderboard() {
     try {
       const corsProxy = 'https://api.allorigins.win/raw?url=';
-      const espnUrl = encodeURIComponent('https://www.espn.com/golf/leaderboard');
-      const response = await fetch(corsProxy + espnUrl);
+      const apiUrl = encodeURIComponent('https://site.api.espn.com/apis/site/v2/sports/golf/leaderboard?league=pga');
+
+      const response = await fetch(corsProxy + apiUrl);
       if (!response.ok) throw new Error('Failed to fetch leaderboard');
-      const html = await response.text();
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(html, 'text/html');
-      
-      // Tournament name
-      let tournamentName = 'Unknown Tournament';
-      const h1 = doc.querySelector('h1');
-      if (h1) {
-        tournamentName = h1.textContent.trim();
-      } else {
-        const pageTitle = doc.querySelector('title');
-        if (pageTitle) {
-          const match = pageTitle.textContent.match(/^\d{4}\s+(.+?)\s+Leaderboard/i);
-          if (match) tournamentName = match[1];
+
+      const data = await response.json();
+
+      const event = data?.events?.[0];
+      if (!event) throw new Error('No event data returned');
+
+      const tournamentName = event.name || 'Unknown Tournament';
+      const competition = event.competitions?.[0];
+      const statusDetail = competition?.status?.type?.detail || 'In Progress';
+      const isCompleted = competition?.status?.type?.completed === true;
+
+      const leaderboard = [];
+
+      (competition?.competitors || []).forEach(comp => {
+        try {
+          const name = comp.athlete?.displayName;
+          if (!name || name.length < 3) return;
+
+          const position = comp.status?.position?.displayName || '—';
+
+          // Total score to par
+          const rawScore = comp.score;
+          let score = '—';
+          if (rawScore !== undefined && rawScore !== null) {
+            const n = parseInt(rawScore, 10);
+            if (!isNaN(n)) {
+              score = n === 0 ? 'E' : n > 0 ? `+${n}` : `${n}`;
+            }
+          }
+
+          // Today's round score (last linescore entry)
+          const linescores = comp.linescores || [];
+          let today = '—';
+          if (linescores.length > 0) {
+            const lastRound = linescores[linescores.length - 1];
+            const todayN = parseInt(lastRound?.value, 10);
+            if (!isNaN(todayN)) {
+              today = todayN === 0 ? 'E' : todayN > 0 ? `+${todayN}` : `${todayN}`;
+            }
+          }
+
+          const thruRaw = comp.status?.thru;
+          let thru = '—';
+          if (isCompleted) {
+            thru = 'F';
+          } else if (thruRaw !== undefined && thruRaw !== null) {
+            thru = thruRaw === 0 ? '—' : String(thruRaw);
+          }
+
+          let earnings = 0;
+          if (comp.earnings) earnings = parseFloat(comp.earnings) || 0;
+
+          leaderboard.push({
+            name, position, score, today, thru,
+            tot: score, // score-to-par is the meaningful total
+            earnings,
+            raw: { POS: position, SCORE: score, TODAY: today, THRU: thru, TOT: score }
+          });
+        } catch (e) {
+          console.warn('Error parsing competitor:', e);
         }
-      }
+      });
+
+      console.log('ESPN API parsed:', leaderboard.length, 'golfers');
+
+      return {
+        tournamentName,
+        status: statusDetail,
+        headers: ['POS', 'PLAYER', 'SCORE', 'TODAY', 'THRU', 'TOT'],
+        leaderboard,
+        lastUpdated: new Date(),
+        rawDataAvailable: leaderboard.length > 0
+      };
+    } catch (error) {
+      console.error('Error fetching ESPN API:', error);
+      throw error;
+    }
+  }
       
       // Status
       let status = 'In Progress';
