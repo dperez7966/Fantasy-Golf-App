@@ -991,13 +991,26 @@
     // Fetch leaderboard from ESPN's JSON API (avoids the "JavaScript is disabled" HTML scraping problem)
   async function scrapeESPNLeaderboard() {
     try {
-      const corsProxy = 'https://api.allorigins.win/raw?url=';
-      const apiUrl = encodeURIComponent('https://site.api.espn.com/apis/site/v2/sports/golf/leaderboard?league=pga');
+      const espnUrl = 'https://site.api.espn.com/apis/site/v2/sports/golf/leaderboard?league=pga';
+      const proxies = [
+        'https://api.allorigins.win/raw?url=',
+        'https://corsproxy.io/?',
+        'https://api.codetabs.com/v1/proxy?quest=',
+      ];
 
-      const response = await fetch(corsProxy + apiUrl);
-      if (!response.ok) throw new Error('Failed to fetch leaderboard');
-
-      const data = await response.json();
+      let data = null;
+      let lastError = null;
+      for (const proxy of proxies) {
+        try {
+          const response = await fetch(proxy + encodeURIComponent(espnUrl));
+          if (!response.ok) throw new Error(`HTTP ${response.status}`);
+          data = await response.json();
+          if (data?.events?.length) break;
+        } catch (e) {
+          lastError = e;
+        }
+      }
+      if (!data?.events?.length) throw lastError || new Error('All proxies failed');
 
       const event = data?.events?.[0];
       if (!event) throw new Error('No event data returned');
@@ -1016,30 +1029,30 @@
 
           const position = comp.status?.position?.displayName || '—';
 
-          // Total score to par
-          const rawScore = comp.score;
+          // Total score to par — ESPN now returns comp.score as an object {value, displayValue}
+          const rawScore = typeof comp.score === 'object' ? comp.score?.displayValue : comp.score;
           let score = '—';
-          if (rawScore !== undefined && rawScore !== null) {
-            const n = parseInt(rawScore, 10);
-            if (!isNaN(n)) {
-              score = n === 0 ? 'E' : n > 0 ? `+${n}` : `${n}`;
+          if (rawScore) {
+            if (rawScore === 'E') {
+              score = 'E';
+            } else {
+              const n = parseInt(rawScore, 10);
+              if (!isNaN(n)) score = n === 0 ? 'E' : n > 0 ? `+${n}` : `${n}`;
             }
           }
 
-          // Today's round score (last linescore entry)
+          // Today's round score — use last completed linescore's displayValue (to-par, not total strokes)
           const linescores = comp.linescores || [];
           let today = '—';
-          if (linescores.length > 0) {
-            const lastRound = linescores[linescores.length - 1];
-            const todayN = parseInt(lastRound?.value, 10);
-            if (!isNaN(todayN)) {
-              today = todayN === 0 ? 'E' : todayN > 0 ? `+${todayN}` : `${todayN}`;
-            }
+          const completedRounds = linescores.filter(l => l.displayValue !== undefined);
+          if (completedRounds.length > 0) {
+            today = completedRounds[completedRounds.length - 1].displayValue || '—';
           }
 
           const thruRaw = comp.status?.thru;
+          const todayDetail = comp.status?.todayDetail || '';
           let thru = '—';
-          if (isCompleted) {
+          if (isCompleted || todayDetail.includes('(F)')) {
             thru = 'F';
           } else if (thruRaw !== undefined && thruRaw !== null) {
             thru = thruRaw === 0 ? '—' : String(thruRaw);
